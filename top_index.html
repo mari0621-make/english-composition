@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語学習アプリ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+    color: #333;
+  }
+
+  header p {
+    color: #999;
+    margin-top: 8px;
+    font-size: 0.95em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 28px 20px 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e8edf2;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+
+  .card-thumb {
+    width: 72px;
+    height: 88px;
+    border-radius: 6px;
+    border: 2px solid #d0dce8;
+    background: #eef3f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .thumb-line {
+    background: #a8bfd4;
+    border-radius: 2px;
+    width: 100%;
+    height: 10px;
+  }
+
+  .thumb-line.short {
+    width: 70%;
+  }
+
+  .thumb-line.tall {
+    height: 28px;
+  }
+
+  .card-title {
+    font-size: 1.05em;
+    font-weight: bold;
+    color: #222;
+  }
+
+  .card-desc {
+    font-size: 0.82em;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  .card-tag {
+    display: inline-block;
+    background: #e8f0fe;
+    color: #4a6fa5;
+    font-size: 0.75em;
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✏️ 英語学習アプリ</h1>
+  <p>学習メニューを選んでください</p>
+</header>
+
+<div class="grid">
+
+  <a class="card" href="index.html">
+    <div class="card-thumb">
+      <div class="thumb-line"></div>
+      <div class="thumb-line short"></div>
+      <div class="thumb-line"></div>
+      <div class="thumb-line short"></div>
+    </div>
+    <span class="card-title">英作文</span>
+    <span class="card-desc">英検英作文の重要表現を空欄補充で復習しよう</span>
+    <span class="card-tag">英検対策</span>
+  </a>
+
+  <a class="card" href="shunkan/index.html">
+    <div class="card-thumb">
+      <div class="thumb-line short"></div>
+      <div class="thumb-line tall"></div>
+      <div class="thumb-line short"></div>
+    </div>
+    <span class="card-title">瞬間英作文</span>
+    <span class="card-desc">日本語を見て瞬時に英語に変換する練習</span>
+    <span class="card-tag">スピーキング</span>
+  </a>
+
+</div>
+
+</body>
+</html>
