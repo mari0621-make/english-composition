@@ -100,6 +100,27 @@
     border-radius: 20px;
     width: fit-content;
   }
+
+  .progress-wrap {
+    background: #fce4ec;
+    border-radius: 10px;
+    height: 8px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: #e91e63;
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .progress-label {
+    font-size: 0.78em;
+    color: #c2185b;
+  }
 </style>
 </head>
 <body>
@@ -120,6 +141,10 @@
     <span class="card-title">若者と政治</span>
     <span class="card-desc">投票の重要性と若者の政治参加について。空欄をクリックして答えを確認しよう。</span>
     <span class="card-tag">社会・政治</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_202303_politics"></div>
+    </div>
+    <span class="progress-label" id="label_202303_politics">未挑戦</span>
   </a>
 
   <a class="card" href="pages/review_02.html">
@@ -127,37 +152,48 @@
     <span class="card-title">環境問題</span>
     <span class="card-desc">地球温暖化と再生可能エネルギーについて。空欄をクリックして答えを確認しよう。</span>
     <span class="card-tag">環境・科学</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_review_02"></div>
+    </div>
+    <span class="progress-label" id="label_review_02">未挑戦</span>
   </a>
-   <a class="card" href="pages/review_02.html">
-    <span class="card-number">test</span>
-    <span class="card-title">教育について</span>
-    <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
-    <span class="card-tag">教育</span>
-  </a>
+
   <a class="card" href="pages/review_02.html">
     <span class="card-number">test</span>
     <span class="card-title">教育について</span>
     <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
     <span class="card-tag">教育</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_review_03"></div>
+    </div>
+    <span class="progress-label" id="label_review_03">未挑戦</span>
   </a>
-   </a>
-   <a class="card" href="pages/review_02.html">
-    <span class="card-number">test</span>
-    <span class="card-title">教育について</span>
-    <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
-    <span class="card-tag">教育</span>
-  </a>
-  <a class="card" href="pages/review_02.html">
-    <span class="card-number">test</span>
-    <span class="card-title">教育について</span>
-    <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
-    <span class="card-tag">教育</span>
-  </a>
+
   <!-- ▲▲▲ ここまで ▲▲▲ -->
 
 </div>
 
 <script>
+// 進捗バーの読み込み
+// ▼ ページを増やしたらここにIDを追加する
+const pageIds = [
+  '202303_politics',
+  'review_02',
+  'review_03',
+];
+
+pageIds.forEach(id => {
+  const data = JSON.parse(localStorage.getItem('score_' + id) || 'null');
+  const bar = document.getElementById('bar_' + id);
+  const label = document.getElementById('label_' + id);
+  if (!bar || !label) return;
+  if (data) {
+    setTimeout(() => { bar.style.width = data.best + '%'; }, 100);
+    label.textContent = `最高 ${data.best}％ ／ ${data.count}回挑戦`;
+  }
+});
+
+// 桜アニメーション
 const canvas = document.getElementById('sakura');
 const ctx = canvas.getContext('2d');
 

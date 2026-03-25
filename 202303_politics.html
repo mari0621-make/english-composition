@@ -10,9 +10,37 @@
     padding: 20px;
   }
   .blank {
-    color: blue;
-    cursor: pointer;
-    border-bottom: 1px solid blue;
+    display: inline-block;
+    min-width: 80px;
+    position: relative;
+  }
+  .blank input {
+    border: none;
+    border-bottom: 2px solid #aaa;
+    outline: none;
+    font-size: 1em;
+    font-family: sans-serif;
+    width: 130px;
+    background: transparent;
+    padding: 0 2px;
+  }
+  .blank.correct input {
+    color: #fff;
+    background: #4caf50;
+    border-radius: 4px;
+    border-bottom: none;
+    pointer-events: none;
+  }
+  .blank.wrong input {
+    color: #fff;
+    background: #f44336;
+    border-radius: 4px;
+    border-bottom: none;
+  }
+  .mark {
+    margin-left: 3px;
+    font-size: 1em;
+    font-weight: bold;
   }
   .ja {
     color: #555;
@@ -23,62 +51,135 @@
   .en {
     margin-top: 0;
   }
+  .check-btn {
+    display: inline-block;
+    margin: 24px 0 8px;
+    padding: 10px 32px;
+    background: #FFD700;
+    color: #333;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .check-btn:hover { background: #ffc200; }
+  .reset-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #eee;
+    color: #555;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .reset-btn:hover { background: #ddd; }
+  .score {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0;
+  }
 </style>
 </head>
 <body>
+
 <a href="index.html" style="text-decoration:none; background:#FFD700; color:#333; font-size:0.9em; padding:8px 16px; border-radius:20px; font-weight:bold; display:inline-block;">← 一覧へ戻る</a>
 
 <h2>2023年第3回　英検英作文</h2>
-should the government do more to encourage young people to vote in elections 
+should the government do more to encourage young people to vote in elections
 
 <p class="ja">① 最近、一部の政治家が収賄に関与しているため、多くの若者が政治に関心を持っていないことが問題になっている。</p>
 <p class="en">
-① Recently, (<span class="blank" onclick="reveal(this, 'it has become an issue that')">　　　</span>) many young people are not interested in politics, (<span class="blank" onclick="reveal(this, 'partly because')">　　　</span>) some politicians (<span class="blank" onclick="reveal(this, 'have been involved in')">　　　</span>) bribery.
+① Recently, (<span class="blank"><input type="text" placeholder="…" data-answer="it has become an issue that"></span>) many young people are not interested in politics, (<span class="blank"><input type="text" placeholder="…" data-answer="partly because"></span>) some politicians (<span class="blank"><input type="text" placeholder="…" data-answer="have been involved in"></span>) bribery.
 </p>
 
 <p class="ja">② しかし、投票にはいくつかの利点がある。</p>
 <p class="en">
-② (<span class="blank" onclick="reveal(this, 'However')">　　　</span>), there are several advantages (<span class="blank" onclick="reveal(this, 'to')">　　　</span>) voting.
+② (<span class="blank"><input type="text" placeholder="…" data-answer="However"></span>), there are several advantages (<span class="blank"><input type="text" placeholder="…" data-answer="to"></span>) voting.
 </p>
 
 <p class="ja">③ 第一に、選挙を通じて税金の使い道に意見を反映させることができる。</p>
 <p class="en">
-③ First, it allows us to (<span class="blank" onclick="reveal(this, 'have a say in')">　　　</span>) how taxes are used (<span class="blank" onclick="reveal(this, 'through')">　　　</span>) elections.
+③ First, it allows us to (<span class="blank"><input type="text" placeholder="…" data-answer="have a say in"></span>) how taxes are used (<span class="blank"><input type="text" placeholder="…" data-answer="through"></span>) elections.
 </p>
 
 <p class="ja">④ 第二に、投票は政治に参加する機会を与えてくれる。</p>
 <p class="en">
-④ Second, voting (<span class="blank" onclick="reveal(this, 'gives us an opportunity to')">　　　</span>) participate in politics.
+④ Second, voting (<span class="blank"><input type="text" placeholder="…" data-answer="gives us an opportunity to"></span>) participate in politics.
 </p>
 
 <p class="ja">⑤ さらに、投票は若者が社会的責任感を育むのに役立つ。</p>
 <p class="en">
-⑤ Furthermore, voting (<span class="blank" onclick="reveal(this, 'can help')">　　　</span>) young people (<span class="blank" onclick="reveal(this, 'develop a sense of')">　　　</span>) social responsibility.
+⑤ Furthermore, voting (<span class="blank"><input type="text" placeholder="…" data-answer="can help"></span>) young people (<span class="blank"><input type="text" placeholder="…" data-answer="develop a sense of"></span>) social responsibility.
 </p>
 
 <p class="ja">⑥ したがって、政府は若者に投票を促すべきである。</p>
 <p class="en">
-⑥ Therefore, (<span class="blank" onclick="reveal(this, 'the')">　　　</span>) government should encourage young people to vote.
+⑥ Therefore, (<span class="blank"><input type="text" placeholder="…" data-answer="the"></span>) government should encourage young people to vote.
 </p>
 
 <p class="ja">⑦ 結論として、若者の投票率を上げることで社会はより強くなり、次世代のためのより良い未来を築く助けになる。</p>
 <p class="en">
-⑦ In conclusion, increasing (<span class="blank" onclick="reveal(this, 'the')">　　　</span>) voting rate (<span class="blank" onclick="reveal(this, 'among')">　　　</span>) young people will make our society stronger and help (<span class="blank" onclick="reveal(this, 'build')">　　　</span>) (<span class="blank" onclick="reveal(this, 'a better future')">　　　</span>) for the next generation.
+⑦ In conclusion, increasing (<span class="blank"><input type="text" placeholder="…" data-answer="the"></span>) voting rate (<span class="blank"><input type="text" placeholder="…" data-answer="among"></span>) young people will make our society stronger and help (<span class="blank"><input type="text" placeholder="…" data-answer="build"></span>) (<span class="blank"><input type="text" placeholder="…" data-answer="a better future"></span>) for the next generation.
 </p>
 
+<div>
+  <button class="check-btn" onclick="checkAll()">✔ 答え合わせ</button>
+  <button class="reset-btn" onclick="resetAll()">↺ リセット</button>
+</div>
+<div class="score" id="score"></div>
+
 <script>
-function reveal(element, answer) {
-  if (element.dataset.revealed === "true") {
-    element.textContent = "　　　";
-    element.style.color = "blue";
-    element.style.borderBottom = "1px solid blue";
-    element.dataset.revealed = "false";
-  } else {
-    element.textContent = answer;
-    element.style.color = "red";
-    element.style.borderBottom = "none";
-    element.dataset.revealed = "true";
-  }
+function checkAll() {
+  const inputs = document.querySelectorAll('.blank input');
+  let correct = 0;
+  inputs.forEach(input => {
+    const answer = input.dataset.answer.trim().toLowerCase();
+    const typed = input.value.trim().toLowerCase();
+    const span = input.parentElement;
+    span.querySelectorAll('.mark').forEach(m => m.remove());
+    const mark = document.createElement('span');
+    mark.className = 'mark';
+    if (typed === answer) {
+      span.classList.remove('wrong');
+      span.classList.add('correct');
+      mark.textContent = '●';
+      mark.style.color = '#4caf50';
+      correct++;
+    } else {
+      span.classList.remove('correct');
+      span.classList.add('wrong');
+      mark.textContent = '×';
+      mark.style.color = '#f44336';
+    }
+    span.appendChild(mark);
+  });
+  const total = inputs.length;
+  const scoreEl = document.getElementById('score');
+  scoreEl.textContent = `結果：${correct} / ${total} 正解`;
+  scoreEl.style.color = correct === total ? '#4caf50' : '#f44336';
+
+  // スコアをlocalStorageに保存
+  const key = 'score_202303_politics';
+  const prev = JSON.parse(localStorage.getItem(key) || '{"best":0,"count":0}');
+  const pct = Math.round((correct / total) * 100);
+  localStorage.setItem(key, JSON.stringify({
+    best: Math.max(prev.best, pct),
+    count: prev.count + 1
+  }));
+}
+
+function resetAll() {
+  document.querySelectorAll('.blank').forEach(span => {
+    span.classList.remove('correct', 'wrong');
+    span.querySelectorAll('.mark').forEach(m => m.remove());
+    const input = span.querySelector('input');
+    if (input) input.value = '';
+  });
+  document.getElementById('score').textContent = '';
 }
 </script>
 
