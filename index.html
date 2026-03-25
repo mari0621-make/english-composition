@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語復習アプリ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+    color: #333;
+  }
+
+  header p {
+    color: #888;
+    margin-top: 6px;
+    font-size: 0.95em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+
+  .card-number {
+    font-size: 0.78em;
+    color: #aaa;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
+
+  .card-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #222;
+  }
+
+  .card-desc {
+    font-size: 0.88em;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .card-tag {
+    display: inline-block;
+    margin-top: 4px;
+    background: #eef2ff;
+    color: #5566cc;
+    font-size: 0.78em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    width: fit-content;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📝 英語復習アプリ</h1>
+  <p>カードをクリックして復習をスタート</p>
+</header>
+
+<div class="grid">
+
+  <!-- ▼▼▼ ページを増やすときはここにコピーして追加 ▼▼▼ -->
+
+  <a class="card" href="pages/review_01.html">
+    <span class="card-number">No. 01</span>
+    <span class="card-title">若者と政治</span>
+    <span class="card-desc">投票の重要性と若者の政治参加について。空欄をクリックして答えを確認しよう。</span>
+    <span class="card-tag">社会・政治</span>
+  </a>
+
+  <!-- ▲▲▲ ここまで ▲▲▲ -->
+
+</div>
+
+</body>
+</html>
