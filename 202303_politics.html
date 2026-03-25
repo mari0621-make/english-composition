@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>2023年第3回　英検英作文</title>
+<style>
+  body {
+    font-family: sans-serif;
+    line-height: 2;
+    padding: 20px;
+  }
+  .blank {
+    color: blue;
+    cursor: pointer;
+    border-bottom: 1px solid blue;
+  }
+  .ja {
+    color: #555;
+    font-size: 0.9em;
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+  .en {
+    margin-top: 0;
+  }
+</style>
+</head>
+<body>
+
+<h2>2023年第3回　英検英作文</h2>
+should the government do more to encourage young people to vote in elections 
+
+<p class="ja">① 最近、一部の政治家が収賄に関与しているため、多くの若者が政治に関心を持っていないことが問題になっている。</p>
+<p class="en">
+① Recently, (<span class="blank" onclick="reveal(this, 'it has become an issue that')">　　　</span>) many young people are not interested in politics, (<span class="blank" onclick="reveal(this, 'partly because')">　　　</span>) some politicians (<span class="blank" onclick="reveal(this, 'have been involved in')">　　　</span>) bribery.
+</p>
+
+<p class="ja">② しかし、投票にはいくつかの利点がある。</p>
+<p class="en">
+② (<span class="blank" onclick="reveal(this, 'However')">　　　</span>), there are several advantages (<span class="blank" onclick="reveal(this, 'to')">　　　</span>) voting.
+</p>
+
+<p class="ja">③ 第一に、選挙を通じて税金の使い道に意見を反映させることができる。</p>
+<p class="en">
+③ First, it allows us to (<span class="blank" onclick="reveal(this, 'have a say in')">　　　</span>) how taxes are used (<span class="blank" onclick="reveal(this, 'through')">　　　</span>) elections.
+</p>
+
+<p class="ja">④ 第二に、投票は政治に参加する機会を与えてくれる。</p>
+<p class="en">
+④ Second, voting (<span class="blank" onclick="reveal(this, 'gives us an opportunity to')">　　　</span>) participate in politics.
+</p>
+
+<p class="ja">⑤ さらに、投票は若者が社会的責任感を育むのに役立つ。</p>
+<p class="en">
+⑤ Furthermore, voting (<span class="blank" onclick="reveal(this, 'can help')">　　　</span>) young people (<span class="blank" onclick="reveal(this, 'develop a sense of')">　　　</span>) social responsibility.
+</p>
+
+<p class="ja">⑥ したがって、政府は若者に投票を促すべきである。</p>
+<p class="en">
+⑥ Therefore, (<span class="blank" onclick="reveal(this, 'the')">　　　</span>) government should encourage young people to vote.
+</p>
+
+<p class="ja">⑦ 結論として、若者の投票率を上げることで社会はより強くなり、次世代のためのより良い未来を築く助けになる。</p>
+<p class="en">
+⑦ In conclusion, increasing (<span class="blank" onclick="reveal(this, 'the')">　　　</span>) voting rate (<span class="blank" onclick="reveal(this, 'among')">　　　</span>) young people will make our society stronger and help (<span class="blank" onclick="reveal(this, 'build')">　　　</span>) (<span class="blank" onclick="reveal(this, 'a better future')">　　　</span>) for the next generation.
+</p>
+
+<script>
+function reveal(element, answer) {
+  if (element.dataset.revealed === "true") {
+    element.textContent = "　　　";
+    element.style.color = "blue";
+    element.style.borderBottom = "1px solid blue";
+    element.dataset.revealed = "false";
+  } else {
+    element.textContent = answer;
+    element.style.color = "red";
+    element.style.borderBottom = "none";
+    element.dataset.revealed = "true";
+  }
+}
+</script>
+
+</body>
+</html>
