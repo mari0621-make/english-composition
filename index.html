@@ -3,34 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英語復習アプリ</title>
+<title>英語学習アプリ</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: sans-serif;
-    background: #fff;
+    background: #f5f7fa;
     min-height: 100vh;
-    padding: 30px 20px;
-    overflow-x: hidden;
-  }
-
-  canvas#sakura {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  header, .grid {
-    position: relative;
-    z-index: 1;
+    padding: 40px 20px;
   }
 
   header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
   }
 
   header h1 {
@@ -40,227 +26,123 @@
 
   header p {
     color: #999;
-    margin-top: 6px;
+    margin-top: 8px;
     font-size: 0.95em;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
-    max-width: 900px;
+    max-width: 520px;
     margin: 0 auto;
   }
 
   .card {
     background: white;
-    border-radius: 12px;
-    padding: 22px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 28px 20px 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
     text-decoration: none;
     color: inherit;
+    border: 1px solid #e8edf2;
     transition: transform 0.15s, box-shadow 0.15s;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    border: 1px solid #fce4ec;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
   }
 
   .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(233,84,130,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
   }
 
-  .card-number {
-    font-size: 0.78em;
-    color: #f48fb1;
-    font-weight: bold;
-    letter-spacing: 0.05em;
+  .card-thumb {
+    width: 72px;
+    height: 88px;
+    border-radius: 6px;
+    border: 2px solid #d0dce8;
+    background: #eef3f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .thumb-line {
+    background: #a8bfd4;
+    border-radius: 2px;
+    width: 100%;
+    height: 10px;
+  }
+
+  .thumb-line.short {
+    width: 70%;
+  }
+
+  .thumb-line.tall {
+    height: 28px;
   }
 
   .card-title {
-    font-size: 1.1em;
+    font-size: 1.05em;
     font-weight: bold;
     color: #222;
   }
 
   .card-desc {
-    font-size: 0.88em;
-    color: #666;
+    font-size: 0.82em;
+    color: #888;
     line-height: 1.6;
   }
 
   .card-tag {
     display: inline-block;
-    margin-top: 4px;
-    background: #fce4ec;
-    color: #c2185b;
-    font-size: 0.78em;
-    padding: 3px 10px;
+    background: #e8f0fe;
+    color: #4a6fa5;
+    font-size: 0.75em;
+    padding: 3px 12px;
     border-radius: 20px;
-    width: fit-content;
-  }
-
-  .progress-wrap {
-    background: #fce4ec;
-    border-radius: 10px;
-    height: 8px;
-    margin-top: 4px;
-    overflow: hidden;
-  }
-
-  .progress-bar {
-    height: 8px;
-    background: #e91e63;
-    border-radius: 10px;
-    width: 0%;
-    transition: width 0.6s ease;
-  }
-
-  .progress-label {
-    font-size: 0.78em;
-    color: #c2185b;
   }
 </style>
 </head>
 <body>
 
-<canvas id="sakura"></canvas>
-
 <header>
-  <h1>🌸 英語復習アプリ</h1>
-  <p>カードをクリックして復習をスタート</p>
+  <h1>✏️ 英語学習アプリ</h1>
+  <p>学習メニューを選んでください</p>
 </header>
 
 <div class="grid">
 
-  <!-- ▼▼▼ ページを増やすときはここにコピーして追加 ▼▼▼ -->
-
-  <a class="card" href="202303_politics.html">
-    <span class="card-number">No. 01</span>
-    <span class="card-title">若者と政治</span>
-    <span class="card-desc">投票の重要性と若者の政治参加について。空欄をクリックして答えを確認しよう。</span>
-    <span class="card-tag">社会・政治</span>
-    <div class="progress-wrap">
-      <div class="progress-bar" id="bar_202303_politics"></div>
+  <a class="card" href="index.html">
+    <div class="card-thumb">
+      <div class="thumb-line"></div>
+      <div class="thumb-line short"></div>
+      <div class="thumb-line"></div>
+      <div class="thumb-line short"></div>
     </div>
-    <span class="progress-label" id="label_202303_politics">未挑戦</span>
+    <span class="card-title">英作文</span>
+    <span class="card-desc">英検英作文の重要表現を空欄補充で復習しよう</span>
+    <span class="card-tag">英検対策</span>
   </a>
 
-  <a class="card" href="pages/review_02.html">
-    <span class="card-number">test</span>
-    <span class="card-title">環境問題</span>
-    <span class="card-desc">地球温暖化と再生可能エネルギーについて。空欄をクリックして答えを確認しよう。</span>
-    <span class="card-tag">環境・科学</span>
-    <div class="progress-wrap">
-      <div class="progress-bar" id="bar_review_02"></div>
+  <a class="card" href="shunkan_index">
+    <div class="card-thumb">
+      <div class="thumb-line short"></div>
+      <div class="thumb-line tall"></div>
+      <div class="thumb-line short"></div>
     </div>
-    <span class="progress-label" id="label_review_02">未挑戦</span>
+    <span class="card-title">瞬間英作文</span>
+    <span class="card-desc">日本語を見て瞬時に英語に変換する練習</span>
+    <span class="card-tag">スピーキング</span>
   </a>
-
-  <a class="card" href="pages/review_02.html">
-    <span class="card-number">test</span>
-    <span class="card-title">教育について</span>
-    <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
-    <span class="card-tag">教育</span>
-    <div class="progress-wrap">
-      <div class="progress-bar" id="bar_review_03"></div>
-    </div>
-    <span class="progress-label" id="label_review_03">未挑戦</span>
-  </a>
-
-  <!-- ▲▲▲ ここまで ▲▲▲ -->
 
 </div>
-
-<script>
-// 進捗バーの読み込み
-// ▼ ページを増やしたらここにIDを追加する
-const pageIds = [
-  '202303_politics',
-  'review_02',
-  'review_03',
-];
-
-pageIds.forEach(id => {
-  const data = JSON.parse(localStorage.getItem('score_' + id) || 'null');
-  const bar = document.getElementById('bar_' + id);
-  const label = document.getElementById('label_' + id);
-  if (!bar || !label) return;
-  if (data) {
-    setTimeout(() => { bar.style.width = data.best + '%'; }, 100);
-    label.textContent = `最高 ${data.best}％ ／ ${data.count}回挑戦`;
-  }
-});
-
-// 桜アニメーション
-const canvas = document.getElementById('sakura');
-const ctx = canvas.getContext('2d');
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-const PETAL_COUNT = 40;
-const petals = [];
-
-function randomPetal() {
-  return {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height - canvas.height,
-    size: Math.random() * 8 + 6,
-    speedY: Math.random() * 1.2 + 0.6,
-    speedX: Math.random() * 0.8 - 0.4,
-    angle: Math.random() * Math.PI * 2,
-    spin: (Math.random() - 0.5) * 0.04,
-    opacity: Math.random() * 0.5 + 0.4,
-    swing: Math.random() * 0.8 + 0.3,
-    swingOffset: Math.random() * Math.PI * 2,
-    tick: 0,
-  };
-}
-
-for (let i = 0; i < PETAL_COUNT; i++) {
-  const p = randomPetal();
-  p.y = Math.random() * canvas.height;
-  petals.push(p);
-}
-
-function drawPetal(p) {
-  ctx.save();
-  ctx.translate(p.x, p.y);
-  ctx.rotate(p.angle);
-  ctx.globalAlpha = p.opacity;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, p.size * 0.5, p.size, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#f8bbd0';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(0, 0, p.size * 0.3, p.size * 0.7, 0.5, 0, Math.PI * 2);
-  ctx.fillStyle = '#fce4ec';
-  ctx.fill();
-  ctx.restore();
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (const p of petals) {
-    p.tick++;
-    p.y += p.speedY;
-    p.x += p.speedX + Math.sin(p.tick * 0.03 + p.swingOffset) * p.swing;
-    p.angle += p.spin;
-    if (p.y > canvas.height + 20) {
-      Object.assign(p, randomPetal());
-    }
-    drawPetal(p);
-  }
-  requestAnimationFrame(animate);
-}
-animate();
-</script>
 
 </body>
 </html>
