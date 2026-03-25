@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>瞬間英作文</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Lato:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 60px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    width: 100%;
+  }
+
+  .back-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #FFD700;
+    color: #333;
+    font-size: 0.85em;
+    font-weight: bold;
+    padding: 7px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  header h1 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 4px;
+  }
+
+  header p {
+    color: #999;
+    font-size: 0.85em;
+    margin-top: 4px;
+  }
+
+  .progress-info {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .card-wrap {
+    width: 100%;
+    max-width: 500px;
+    perspective: 1000px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    width: 100%;
+    min-height: 260px;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.2s;
+    border: 1.5px solid #e8edf2;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.14);
+  }
+
+  .card-label {
+    font-size: 0.72em;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bbb;
+    margin-bottom: 16px;
+  }
+
+  .ja-text {
+    font-size: 1.15em;
+    color: #222;
+    line-height: 1.8;
+    font-weight: 700;
+  }
+
+  .en-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.05em;
+    color: #2a6ebb;
+    line-height: 1.8;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1.5px dashed #d0dce8;
+    width: 100%;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s, max-height 0.5s;
+  }
+
+  .en-text.visible {
+    opacity: 1;
+    max-height: 200px;
+  }
+
+  .tap-hint {
+    font-size: 0.78em;
+    color: #ccc;
+    margin-top: 18px;
+  }
+
+  /* タイマーリング */
+  .timer-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .timer-svg {
+    transform: rotate(-90deg);
+  }
+
+  .timer-bg {
+    fill: none;
+    stroke: #e8edf2;
+    stroke-width: 5;
+  }
+
+  .timer-ring {
+    fill: none;
+    stroke: #4a90d9;
+    stroke-width: 5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.5s;
+  }
+
+  .timer-text {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin-top: 6px;
+  }
+
+  /* ボタン */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 13px 0;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: transform 0.1s, opacity 0.1s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-reveal {
+    background: #2a6ebb;
+    color: white;
+  }
+
+  .btn-next {
+    background: #FFD700;
+    color: #333;
+  }
+
+  .btn-reset {
+    background: #eee;
+    color: #777;
+    flex: 0 0 auto;
+    padding: 13px 20px;
+  }
+
+  /* 完了画面 */
+  .complete {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .complete.show { display: flex; }
+
+  .complete h2 {
+    font-size: 1.6em;
+    color: #333;
+  }
+
+  .complete p {
+    color: #888;
+    font-size: 0.95em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div><a class="back-btn" href="../index.html">← TOPへ戻る</a></div>
+  <h1>⚡ 瞬間英作文</h1>
+  <p>日本語を見て英語に変換しよう</p>
+</header>
+
+<div class="progress-info" id="progressInfo">1 / 6</div>
+
+<div class="timer-wrap">
+  <svg class="timer-svg" width="70" height="70" viewBox="0 0 70 70">
+    <circle class="timer-bg" cx="35" cy="35" r="28"/>
+    <circle class="timer-ring" id="timerRing" cx="35" cy="35" r="28"
+      stroke-dasharray="175.9"
+      stroke-dashoffset="0"/>
+  </svg>
+  <div class="timer-text" id="timerText">60</div>
+</div>
+
+<div class="card-wrap">
+  <div class="card" id="mainCard" onclick="revealAnswer()">
+    <div class="card-label">日本語 → 英語</div>
+    <div class="ja-text" id="jaText"></div>
+    <div class="en-text" id="enText"></div>
+    <div class="tap-hint" id="tapHint">タップして英語を確認</div>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-reveal" onclick="revealAnswer()">英語を見る</button>
+  <button class="btn btn-next" onclick="nextCard()">次へ →</button>
+  <button class="btn btn-reset" onclick="resetAll()">↺</button>
+</div>
+
+<div class="complete" id="completeScreen">
+  <div style="font-size:2.5em">🎉</div>
+  <h2>お疲れさまでした！</h2>
+  <p>全 6 問を終了しました。</p>
+  <button class="btn btn-next" style="max-width:200px; padding:13px 32px;" onclick="resetAll()">もう一度挑戦</button>
+</div>
+
+<script>
+const cards = [
+  {
+    ja: '仕事を変えたいので英語を勉強しています。そのためにはTOEICで800点が必要です。しかし前回のテストで795点しか取れず、本当に悔しかったです。',
+    en: 'Because I want to change jobs, I\'m studying English. To do that, I need a TOEIC score of 800. However, I got 795 on the last TOEIC test and I was really frustrated.'
+  },
+  {
+    ja: 'フリートークしましょう。',
+    en: 'Can we have a free conversation?'
+  },
+  {
+    ja: '実際のところ、あまり楽しめていません。上司がとても厳しく、仕事が難しいし、自分に合っていないと思います。',
+    en: 'Actually I don\'t really enjoy it, because my boss is very strict, the work is difficult, and I don\'t think it\'s a good fit for me.'
+  },
+  {
+    ja: '仕事でほとんど英語を使わなくなりました。',
+    en: 'No, I hardly use English at work anymore.'
+  },
+  {
+    ja: '最も難しい仕事はマネージャーだと思います。人をモチベートしてマネジメントしなければならないからです。でもとてもやりがいがあると思います。',
+    en: 'I think being a manager is the most difficult, because you have to motivate and manage people. But I think it\'s very rewarding.'
+  },
+  {
+    ja: 'たとえお金が十分にあっても、働き続けたいと思います。',
+    en: 'Even if I had enough money, I would still want to work.'
+  },
+];
+
+let current = 0;
+let timer = null;
+let seconds = 60;
+const TOTAL = 60;
+const circumference = 175.9;
+
+function loadCard() {
+  const c = cards[current];
+  document.getElementById('jaText').textContent = c.ja;
+  document.getElementById('enText').textContent = c.en;
+  document.getElementById('enText').classList.remove('visible');
+  document.getElementById('tapHint').style.display = '';
+  document.getElementById('progressInfo').textContent = `${current + 1} / ${cards.length}`;
+  document.getElementById('mainCard').style.display = 'flex';
+  document.getElementById('completeScreen').classList.remove('show');
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timer);
+  seconds = TOTAL;
+  updateTimer();
+  timer = setInterval(() => {
+    seconds--;
+    updateTimer();
+    if (seconds <= 0) {
+      clearInterval(timer);
+      revealAnswer();
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  const ratio = seconds / TOTAL;
+  const offset = circumference * (1 - ratio);
+  const ring = document.getElementById('timerRing');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = seconds > 20 ? '#4a90d9' : seconds > 10 ? '#f0a500' : '#e05555';
+  document.getElementById('timerText').textContent = seconds;
+}
+
+function revealAnswer() {
+  document.getElementById('enText').classList.add('visible');
+  document.getElementById('tapHint').style.display = 'none';
+  clearInterval(timer);
+}
+
+function nextCard() {
+  clearInterval(timer);
+  current++;
+  if (current >= cards.length) {
+    document.getElementById('mainCard').style.display = 'none';
+    document.getElementById('progressInfo').textContent = '完了！';
+    document.getElementById('completeScreen').classList.add('show');
+    return;
+  }
+  loadCard();
+}
+
+function resetAll() {
+  current = 0;
+  document.getElementById('mainCard').style.display = 'flex';
+  document.getElementById('completeScreen').classList.remove('show');
+  loadCard();
+}
+
+loadCard();
+</script>
+
+</body>
+</html>
