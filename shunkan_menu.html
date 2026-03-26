@@ -175,7 +175,7 @@
     </div>
     <span class="card-title">すべての問題</span>
     <span class="card-desc">全問をランダムに練習しよう</span>
-    <span class="card-tag">全6問</span>
+    <span class="card-tag" id="totalTag">読込中...</span>
   </a>
 
   <a class="card" href="shunkan_index.html?mode=wrong" id="cardWrong">
@@ -191,22 +191,54 @@
 
 </div>
 
+<div style="max-width:520px; margin: 20px auto 0; padding: 0 4px;">
+  <div style="display:flex; justify-content:space-between; font-size:0.8em; color:#aaa; margin-bottom:4px;">
+    <span>正答率</span>
+    <span id="scoreLabel">－</span>
+  </div>
+  <div style="background:#e8edf2; border-radius:10px; height:10px; overflow:hidden;">
+    <div id="scoreBar" style="height:10px; background:#4caf50; border-radius:10px; width:0%; transition:width 0.6s ease;"></div>
+  </div>
+  <div style="font-size:0.78em; color:#bbb; margin-top:6px; text-align:right;" id="countLabel"></div>
+</div>
+
 <div class="reset-wrap">
   <button class="reset-link" onclick="resetWrong()">× できなかった履歴をリセット</button>
 </div>
 
 <script>
 const WRONG_KEY = 'shunkan_wrong';
+const CSV_PATH  = 'cards.csv';
+let totalCount  = 0;
+
+async function loadCSVCount() {
+  try {
+    const res  = await fetch(CSV_PATH + '?v=' + Date.now());
+    const text = await res.text();
+    totalCount = text.trim().split('\n').slice(1).filter(l => l.trim()).length;
+    document.getElementById('totalTag').textContent = `全${totalCount}問`;
+  } catch (e) {
+    document.getElementById('totalTag').textContent = '読込失敗';
+  }
+  updateWrongCard();
+}
 
 function updateWrongCard() {
   const wrong = JSON.parse(localStorage.getItem(WRONG_KEY) || '[]');
-  const card = document.getElementById('cardWrong');
-  const tag  = document.getElementById('wrongTag');
-  tag.textContent = `${wrong.length}問`;
-  if (wrong.length === 0) {
-    card.classList.add('disabled');
-  } else {
-    card.classList.remove('disabled');
+  const card  = document.getElementById('cardWrong');
+  const tag   = document.getElementById('wrongTag');
+  tag.textContent = `× ${wrong.length}問`;
+  card.classList.toggle('disabled', wrong.length === 0);
+
+  if (totalCount > 0) {
+    const okCount = totalCount - wrong.length;
+    const pct     = Math.round((okCount / totalCount) * 100);
+    setTimeout(() => {
+      document.getElementById('scoreBar').style.width   = pct + '%';
+    }, 100);
+    document.getElementById('scoreLabel').textContent = pct + '%';
+    document.getElementById('countLabel').textContent =
+      `○ ${okCount}問 ／ × ${wrong.length}問 ／ 全${totalCount}問`;
   }
 }
 
@@ -217,7 +249,7 @@ function resetWrong() {
   }
 }
 
-updateWrongCard();
+loadCSVCount();
 </script>
 
 </body>
