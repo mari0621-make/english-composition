@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英作文練習</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: sans-serif;
+    line-height: 2;
+    background: #fff;
+    min-height: 100vh;
+    padding: 24px 20px 60px;
+  }
+
+  .back-btn {
+    display: inline-block; text-decoration: none;
+    background: #FFD700; color: #333;
+    font-size: 0.85em; font-weight: bold;
+    padding: 8px 16px; border-radius: 20px; margin-bottom: 16px;
+  }
+
+  h2 { font-size: 1.3em; color: #333; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85em; color: #999; margin-bottom: 24px; }
+
+  .ja {
+    color: #555; font-size: 0.9em;
+    margin-bottom: 0; line-height: 1.6;
+  }
+  .en { margin-top: 0; }
+
+  .blank { display: inline-block; min-width: 80px; position: relative; }
+
+  .blank input {
+    border: none; border-bottom: 2px solid #aaa; outline: none;
+    font-size: 1em; font-family: sans-serif;
+    width: 130px; background: transparent; padding: 0 2px;
+  }
+
+  .blank.correct input {
+    color: #fff; background: #4caf50;
+    border-radius: 4px; border-bottom: none; pointer-events: none;
+  }
+
+  .blank.wrong input {
+    color: #fff; background: #f44336;
+    border-radius: 4px; border-bottom: none;
+  }
+
+  .mark { margin-left: 3px; font-size: 1em; font-weight: bold; }
+
+  .correct-answer {
+    display: block; color: #f44336;
+    font-size: 0.82em; font-weight: bold; margin-top: 2px;
+  }
+
+  .btn-wrap { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .check-btn {
+    padding: 10px 28px; background: #FFD700; color: #333;
+    font-size: 1em; font-weight: bold; border: none;
+    border-radius: 20px; cursor: pointer;
+  }
+  .check-btn:hover { background: #ffc200; }
+
+  .reset-btn {
+    padding: 10px 20px; background: #eee; color: #555;
+    font-size: 0.9em; border: none; border-radius: 20px; cursor: pointer;
+  }
+  .reset-btn:hover { background: #ddd; }
+
+  .score { font-size: 1.1em; font-weight: bold; color: #333; margin-top: 10px; }
+
+  .complete-banner {
+    display: none; background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px;
+  }
+  .complete-banner.show { display: block; }
+  .complete-banner h3 { color: #15803d; margin-bottom: 8px; }
+  .complete-banner p  { color: #555; font-size: 0.9em; margin-bottom: 14px; }
+
+  .nav-btn {
+    display: inline-block; padding: 10px 24px;
+    background: #FFD700; color: #333; font-weight: bold;
+    border: none; border-radius: 20px; cursor: pointer;
+    text-decoration: none; margin: 4px; font-size: 0.9em;
+  }
+
+  .loading-msg { color: #aaa; text-align: center; margin-top: 60px; }
+  .error-msg   { color: #e05555; text-align: center; margin-top: 60px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+
+<a class="back-btn" id="backBtn" href="eisakubun_play.html">← 問題一覧へ戻る</a>
+
+<div id="mainContent">
+  <p class="loading-msg">読み込み中...</p>
+</div>
+
+<script>
+const CSV_PATH     = 'eisakubun.csv';
+const SCORE_PREFIX = 'eisakubun_score_';
+
+const params   = new URLSearchParams(location.search);
+const filterId = params.get('id') !== null ? parseInt(params.get('id')) : null;
+
+async function loadCSV() {
+  try {
+    const res  = await fetch(CSV_PATH + '?v=' + Date.now());
+    const text = await res.text();
+    const lines = text.trim().split('\n').slice(1).filter(l => l.trim());
+
+    const all = lines.map((line, i) => {
+      const cols = parseCSVLine(line);
+      return {
+        id:    i,
+        title: cols[0]?.trim() || '',
+        tag:   cols[1]?.trim() || 'その他',
+        ja:    cols[2]?.trim() || '',
+        en:    cols[3]?.trim() || '',
+      };
+    }).filter(c => c.ja && c.en);
+
+    const card = filterId !== null ? all.find(c => c.id === filterId) : null;
+
+    if (!card) {
+      document.getElementById('mainContent').innerHTML = '<p class="error-msg">問題が見つかりません。</p>';
+      return;
+    }
+
+    // 戻るボタンのリンクをタグ付きに更新
+    document.getElementById('backBtn').href = 'eisakubun_play.html?tag=' + encodeURIComponent(card.tag);
+
+    renderDetail(card);
+  } catch (e) {
+    document.getElementById('mainContent').innerHTML =
+      '<p class="error-msg">CSVの読み込みに失敗しました。<br>eisakubun.csv が同じフォルダにあるか確認してください。</p>';
+  }
+}
+
+function parseCSVLine(line) {
+  const cols = []; let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { inQ = !inQ; continue; }
+    if (ch === ',' && !inQ) { cols.push(cur); cur = ''; continue; }
+    cur += ch;
+  }
+  cols.push(cur);
+  return cols;
+}
+
+function buildEnHtml(enStr) {
+  return enStr.replace(/\{([^}]+)\}/g, (_, answer) => {
+    const escaped = answer.replace(/"/g, '&quot;');
+    return '<span class="blank"><input type="text" placeholder="…" data-answer="' + escaped + '"></span>';
+  });
+}
+
+function renderDetail(card) {
+  const main = document.getElementById('mainContent');
+  main.innerHTML =
+    '<h2>' + card.title + '</h2>' +
+    '<p class="subtitle">「' + card.tag + '」 ／ 空欄に入力して答え合わせ</p>' +
+    '<p class="ja">📌 ' + card.ja + '</p>' +
+    '<p class="en">' + buildEnHtml(card.en) + '</p>' +
+    '<div class="btn-wrap">' +
+      '<button class="check-btn" onclick="checkAll()">✔ 答え合わせ</button>' +
+      '<button class="reset-btn" onclick="resetAll()">↺ リセット</button>' +
+    '</div>' +
+    '<div class="score" id="score"></div>' +
+    '<div class="complete-banner" id="completeBanner">' +
+      '<h3>🎉 全問正解！</h3>' +
+      '<p id="completeMsg"></p>' +
+      '<a class="nav-btn" href="eisakubun_play.html?tag=' + encodeURIComponent(card.tag) + '">← 一覧へ戻る</a>' +
+      '<button class="nav-btn" onclick="resetAll()">↺ もう一度</button>' +
+    '</div>';
+}
+
+function normalize(s) {
+  return s.toLowerCase().replace(/\s+/g, '');
+}
+
+function checkAll() {
+  const inputs = document.querySelectorAll('.blank input');
+  let correct = 0;
+
+  inputs.forEach(input => {
+    const answer = normalize(input.dataset.answer);
+    const typed  = normalize(input.value);
+    const span   = input.parentElement;
+
+    span.querySelectorAll('.mark, .correct-answer').forEach(m => m.remove());
+    const mark = document.createElement('span');
+    mark.className = 'mark';
+
+    if (typed === answer) {
+      span.classList.remove('wrong'); span.classList.add('correct');
+      mark.textContent = '●'; mark.style.color = '#4caf50';
+      correct++;
+    } else {
+      span.classList.remove('correct'); span.classList.add('wrong');
+      mark.textContent = '×'; mark.style.color = '#f44336';
+      const ans = document.createElement('span');
+      ans.className = 'correct-answer';
+      ans.textContent = input.dataset.answer;
+      span.appendChild(ans);
+    }
+    span.appendChild(mark);
+  });
+
+  const total   = inputs.length;
+  const scoreEl = document.getElementById('score');
+  scoreEl.textContent = '結果：' + correct + ' / ' + total + ' 正解';
+  scoreEl.style.color = correct === total ? '#4caf50' : '#f44336';
+
+  if (correct === total) {
+    document.getElementById('completeBanner').classList.add('show');
+    document.getElementById('completeMsg').textContent = total + '問すべて正解しました！';
+  }
+}
+
+function resetAll() {
+  document.querySelectorAll('.blank').forEach(span => {
+    span.classList.remove('correct', 'wrong');
+    span.querySelectorAll('.mark, .correct-answer').forEach(m => m.remove());
+    const input = span.querySelector('input');
+    if (input) input.value = '';
+  });
+  document.getElementById('score').textContent = '';
+  document.getElementById('completeBanner')?.classList.remove('show');
+}
+
+loadCSV();
+</script>
+</body>
+</html>
