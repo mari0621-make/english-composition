@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英作文復習</title>
+<title>英語復習アプリ</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,85 +16,111 @@
   }
 
   canvas#sakura {
-    position: fixed; top: 0; left: 0;
+    position: fixed;
+    top: 0; left: 0;
     width: 100%; height: 100%;
-    pointer-events: none; z-index: 0;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  header, main { position: relative; z-index: 1; }
-
-  header { text-align: center; margin-bottom: 30px; }
-
-  .back-btn {
-    display: inline-block; text-decoration: none;
-    background: #FFD700; color: #333;
-    font-size: 0.85em; font-weight: bold;
-    padding: 7px 16px; border-radius: 20px; margin-bottom: 14px;
+  header, .grid {
+    position: relative;
+    z-index: 1;
   }
 
-  header h1 { font-size: 1.8em; color: #333; }
-  header p  { color: #999; margin-top: 6px; font-size: 0.95em; }
-
-  .section { max-width: 900px; margin: 0 auto 36px; }
-
-  .section-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px;
+  header {
+    text-align: center;
+    margin-bottom: 30px;
   }
 
-  .section-title {
-    font-size: 1.05em; font-weight: bold; color: #444;
-    padding-left: 10px; border-left: 4px solid #f48fb1;
+  header h1 {
+    font-size: 1.8em;
+    color: #333;
   }
 
-  .section-link {
-    font-size: 0.82em; color: #e91e63; text-decoration: none; font-weight: bold;
+  header p {
+    color: #999;
+    margin-top: 6px;
+    font-size: 0.95em;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
   .card {
-    background: white; border-radius: 12px; padding: 18px 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    text-decoration: none; color: inherit;
+    text-decoration: none;
+    color: inherit;
     transition: transform 0.15s, box-shadow 0.15s;
-    display: flex; flex-direction: column; gap: 7px;
-    border: 1px solid #fce4ec; cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid #fce4ec;
   }
 
-  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(233,84,130,0.15); }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(233,84,130,0.15);
+  }
 
-  .card-number { font-size: 0.76em; color: #f48fb1; font-weight: bold; }
-  .card-title  { font-size: 1em; font-weight: bold; color: #222; }
+  .card-number {
+    font-size: 0.78em;
+    color: #f48fb1;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
 
-  .card-preview {
-    font-size: 0.82em; color: #888; line-height: 1.5;
-    overflow: hidden; display: -webkit-box;
-    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  .card-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #222;
+  }
+
+  .card-desc {
+    font-size: 0.88em;
+    color: #666;
+    line-height: 1.6;
   }
 
   .card-tag {
-    display: inline-block; background: #fce4ec; color: #c2185b;
-    font-size: 0.75em; padding: 3px 10px; border-radius: 20px; width: fit-content;
+    display: inline-block;
+    margin-top: 4px;
+    background: #fce4ec;
+    color: #c2185b;
+    font-size: 0.78em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    width: fit-content;
   }
 
   .progress-wrap {
-    background: #fce4ec; border-radius: 10px; height: 7px; overflow: hidden; margin-top: 2px;
+    background: #fce4ec;
+    border-radius: 10px;
+    height: 8px;
+    margin-top: 4px;
+    overflow: hidden;
   }
 
   .progress-bar {
-    height: 7px; background: #e91e63; border-radius: 10px;
-    width: 0%; transition: width 0.6s ease;
+    height: 8px;
+    background: #e91e63;
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.6s ease;
   }
 
-  .progress-label { font-size: 0.75em; color: #c2185b; }
-
-  .loading-msg { text-align: center; color: #bbb; margin-top: 60px; font-size: 0.95em; }
-  .error-msg   { text-align: center; color: #e05555; margin-top: 60px; font-size: 0.9em; }
+  .progress-label {
+    font-size: 0.78em;
+    color: #c2185b;
+  }
 </style>
 </head>
 <body>
@@ -102,151 +128,135 @@
 <canvas id="sakura"></canvas>
 
 <header>
-  <div><a class="back-btn" href="index.html">← TOPへ戻る</a></div>
-  <h1>🌸 英作文復習</h1>
-  <p>カードをクリックして復習スタート</p>
+  <h1>🌸 英語復習アプリ</h1>
+  <p>カードをクリックして復習をスタート</p>
 </header>
 
-<main id="mainContent">
-  <p class="loading-msg">読み込み中...</p>
-</main>
+<div class="grid">
+
+  <!-- ▼▼▼ ページを増やすときはここにコピーして追加 ▼▼▼ -->
+
+  <a class="card" href="202303_politics.html">
+    <span class="card-number">No. 01</span>
+    <span class="card-title">若者と政治</span>
+    <span class="card-desc">投票の重要性と若者の政治参加について。空欄をクリックして答えを確認しよう。</span>
+    <span class="card-tag">社会・政治</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_202303_politics"></div>
+    </div>
+    <span class="progress-label" id="label_202303_politics">未挑戦</span>
+  </a>
+
+  <a class="card" href="pages/review_02.html">
+    <span class="card-number">test</span>
+    <span class="card-title">環境問題</span>
+    <span class="card-desc">地球温暖化と再生可能エネルギーについて。空欄をクリックして答えを確認しよう。</span>
+    <span class="card-tag">環境・科学</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_review_02"></div>
+    </div>
+    <span class="progress-label" id="label_review_02">未挑戦</span>
+  </a>
+
+  <a class="card" href="pages/review_02.html">
+    <span class="card-number">test</span>
+    <span class="card-title">教育について</span>
+    <span class="card-desc">XXXXXXXXXXXXXXXXXXXXX</span>
+    <span class="card-tag">教育</span>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="bar_review_03"></div>
+    </div>
+    <span class="progress-label" id="label_review_03">未挑戦</span>
+  </a>
+
+  <!-- ▲▲▲ ここまで ▲▲▲ -->
+
+</div>
 
 <script>
-const CSV_PATH    = 'eisakubun.csv';
-const SCORE_PREFIX = 'eisakubun_score_';
+// 進捗バーの読み込み
+// ▼ ページを増やしたらここにIDを追加する
+const pageIds = [
+  '202303_politics',
+  'review_02',
+  'review_03',
+];
 
-async function loadCSV() {
-  try {
-    const res  = await fetch(CSV_PATH + '?v=' + Date.now());
-    const text = await res.text();
-    const lines = text.trim().split('\n').slice(1).filter(l => l.trim());
-
-    const cards = lines.map((line, i) => {
-      const cols = parseCSVLine(line);
-      return {
-        id:    i,
-        title: cols[0]?.trim() || '',
-        tag:   cols[1]?.trim() || 'その他',
-        ja:    cols[2]?.trim() || '',
-        en:    cols[3]?.trim() || '',
-      };
-    }).filter(c => c.ja && c.en);
-
-    renderSections(cards);
-  } catch (e) {
-    document.getElementById('mainContent').innerHTML =
-      `<p class="error-msg">CSVの読み込みに失敗しました。<br>eisakubun.csv が同じフォルダにあるか確認してください。</p>`;
+pageIds.forEach(id => {
+  const data = JSON.parse(localStorage.getItem('score_' + id) || 'null');
+  const bar = document.getElementById('bar_' + id);
+  const label = document.getElementById('label_' + id);
+  if (!bar || !label) return;
+  if (data) {
+    setTimeout(() => { bar.style.width = data.best + '%'; }, 100);
+    label.textContent = `最高 ${data.best}％ ／ ${data.count}回挑戦`;
   }
-}
-
-function parseCSVLine(line) {
-  const cols = []; let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') { inQ = !inQ; continue; }
-    if (ch === ',' && !inQ) { cols.push(cur); cur = ''; continue; }
-    cur += ch;
-  }
-  cols.push(cur);
-  return cols;
-}
-
-function renderSections(cards) {
-  const tagMap = {};
-  cards.forEach(c => {
-    if (!tagMap[c.tag]) tagMap[c.tag] = [];
-    tagMap[c.tag].push(c);
-  });
-
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '';
-
-  Object.entries(tagMap).forEach(([tag, items]) => {
-    const scoreData = JSON.parse(localStorage.getItem(SCORE_PREFIX + tag) || 'null');
-    const pct   = scoreData ? scoreData.best  : 0;
-    const count = scoreData ? scoreData.count : 0;
-
-    const section = document.createElement('div');
-    section.className = 'section';
-    section.innerHTML = `
-      <div class="section-header">
-        <div class="section-title">🏷 ${tag}</div>
-        <a class="section-link" href="eisakubun_play.html?tag=${encodeURIComponent(tag)}">まとめて練習 →</a>
-      </div>
-      <div class="grid"></div>
-    `;
-    main.appendChild(section);
-
-    const grid = section.querySelector('.grid');
-
-    // タグまとめカード
-    const tagCard = document.createElement('a');
-    tagCard.className = 'card';
-    tagCard.href = `eisakubun_play.html?tag=${encodeURIComponent(tag)}`;
-    tagCard.innerHTML = `
-      <span class="card-number">全${items.length}問</span>
-      <span class="card-title">「${tag}」を通して練習</span>
-      <span class="card-preview">${items.map(i => i.title).join('　')}</span>
-      <span class="card-tag">${tag}</span>
-      <div class="progress-wrap"><div class="progress-bar" style="width:0%" data-pct="${pct}"></div></div>
-      <span class="progress-label">${count > 0 ? `最高 ${pct}％ ／ ${count}回挑戦` : '未挑戦'}</span>
-    `;
-    grid.appendChild(tagCard);
-
-    // 個別カード（1文ずつ）
-    items.forEach((item, idx) => {
-      const card = document.createElement('a');
-      card.className = 'card';
-      card.href = `eisakubun_play.html?id=${item.id}`;
-      // {}を除いてプレビュー表示
-      const enPreview = item.en.replace(/\{([^}]+)\}/g, '___');
-      card.innerHTML = `
-        <span class="card-number">No.${String(idx + 1).padStart(2, '0')}</span>
-        <span class="card-title">${item.title}</span>
-        <span class="card-preview">${item.ja}</span>
-        <span class="card-tag">${item.tag}</span>
-      `;
-      grid.appendChild(card);
-    });
-  });
-
-  // 進捗バーをアニメーション付きで反映
-  setTimeout(() => {
-    document.querySelectorAll('.progress-bar[data-pct]').forEach(bar => {
-      bar.style.width = bar.dataset.pct + '%';
-    });
-  }, 100);
-}
-
-loadCSV();
+});
 
 // 桜アニメーション
 const canvas = document.getElementById('sakura');
-const ctx    = canvas.getContext('2d');
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resize(); window.addEventListener('resize', resize);
-const petals = [];
-function randomPetal() {
-  return { x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height,
-    size: Math.random()*8+6, speedY: Math.random()*1.2+0.6, speedX: Math.random()*0.8-0.4,
-    angle: Math.random()*Math.PI*2, spin: (Math.random()-0.5)*0.04,
-    opacity: Math.random()*0.5+0.4, swing: Math.random()*0.8+0.3,
-    swingOffset: Math.random()*Math.PI*2, tick: 0 };
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
-for (let i = 0; i < 40; i++) { const p = randomPetal(); p.y = Math.random()*canvas.height; petals.push(p); }
+resize();
+window.addEventListener('resize', resize);
+
+const PETAL_COUNT = 40;
+const petals = [];
+
+function randomPetal() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    size: Math.random() * 8 + 6,
+    speedY: Math.random() * 1.2 + 0.6,
+    speedX: Math.random() * 0.8 - 0.4,
+    angle: Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.04,
+    opacity: Math.random() * 0.5 + 0.4,
+    swing: Math.random() * 0.8 + 0.3,
+    swingOffset: Math.random() * Math.PI * 2,
+    tick: 0,
+  };
+}
+
+for (let i = 0; i < PETAL_COUNT; i++) {
+  const p = randomPetal();
+  p.y = Math.random() * canvas.height;
+  petals.push(p);
+}
+
 function drawPetal(p) {
-  ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle); ctx.globalAlpha = p.opacity;
-  ctx.beginPath(); ctx.ellipse(0,0,p.size*.5,p.size,0,0,Math.PI*2); ctx.fillStyle='#f8bbd0'; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(0,0,p.size*.3,p.size*.7,.5,0,Math.PI*2); ctx.fillStyle='#fce4ec'; ctx.fill();
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.angle);
+  ctx.globalAlpha = p.opacity;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, p.size * 0.5, p.size, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#f8bbd0';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(0, 0, p.size * 0.3, p.size * 0.7, 0.5, 0, Math.PI * 2);
+  ctx.fillStyle = '#fce4ec';
+  ctx.fill();
   ctx.restore();
 }
+
 function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  petals.forEach(p => {
-    p.tick++; p.y+=p.speedY; p.x+=p.speedX+Math.sin(p.tick*.03+p.swingOffset)*p.swing; p.angle+=p.spin;
-    if (p.y > canvas.height+20) Object.assign(p, randomPetal());
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const p of petals) {
+    p.tick++;
+    p.y += p.speedY;
+    p.x += p.speedX + Math.sin(p.tick * 0.03 + p.swingOffset) * p.swing;
+    p.angle += p.spin;
+    if (p.y > canvas.height + 20) {
+      Object.assign(p, randomPetal());
+    }
     drawPetal(p);
-  });
+  }
   requestAnimationFrame(animate);
 }
 animate();
