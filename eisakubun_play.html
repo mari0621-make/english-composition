@@ -3,123 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英作文 問題一覧</title>
+<title>英作文 単元一覧</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: sans-serif;
-    background: #fff;
-    min-height: 100vh;
-    padding: 30px 20px;
-    overflow-x: hidden;
-  }
-
-  canvas#sakura {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none; z-index: 0;
-  }
-
+  body { font-family: sans-serif; background: #fff; min-height: 100vh; padding: 30px 20px; overflow-x: hidden; }
+  canvas#sakura { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
   header, main { position: relative; z-index: 1; }
   header { text-align: center; margin-bottom: 30px; }
-
   .back-btn {
-    display: inline-block; text-decoration: none;
-    background: #FFD700; color: #333;
-    font-size: 0.85em; font-weight: bold;
-    padding: 7px 16px; border-radius: 20px; margin-bottom: 14px;
+    display: inline-block; text-decoration: none; background: #FFD700; color: #333;
+    font-size: 0.85em; font-weight: bold; padding: 7px 16px; border-radius: 20px; margin-bottom: 14px;
   }
-
   header h1 { font-size: 1.8em; color: #333; }
   header p  { color: #999; margin-top: 6px; font-size: 0.95em; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
   .card {
     background: white; border-radius: 12px; padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    text-decoration: none; color: inherit;
-    transition: transform 0.15s, box-shadow 0.15s;
-    display: flex; flex-direction: column; gap: 8px;
-    border: 1px solid #fce4ec; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-decoration: none; color: inherit;
+    transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column;
+    gap: 8px; border: 1px solid #fce4ec; cursor: pointer;
   }
-
   .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(233,84,130,0.15); }
-
   .card-number { font-size: 0.76em; color: #f48fb1; font-weight: bold; }
   .card-title  { font-size: 1em; font-weight: bold; color: #222; }
-
-  .card-preview {
-    font-size: 0.82em; color: #888; line-height: 1.5;
-    overflow: hidden; display: -webkit-box;
-    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  }
-
-  .card-tag {
-    display: inline-block; background: #fce4ec; color: #c2185b;
-    font-size: 0.75em; padding: 3px 10px; border-radius: 20px; width: fit-content;
-  }
-
+  .card-tag    { display: inline-block; background: #fce4ec; color: #c2185b; font-size: 0.75em; padding: 3px 10px; border-radius: 20px; width: fit-content; }
+  .progress-wrap  { background: #fce4ec; border-radius: 10px; height: 7px; overflow: hidden; margin-top: 2px; }
+  .progress-bar   { height: 7px; background: #e91e63; border-radius: 10px; width: 0%; transition: width 0.6s ease; }
+  .progress-label { font-size: 0.75em; color: #c2185b; }
   .loading-msg { text-align: center; color: #bbb; margin-top: 60px; font-size: 0.95em; }
   .error-msg   { text-align: center; color: #e05555; margin-top: 60px; font-size: 0.9em; }
 </style>
 </head>
 <body>
-
 <canvas id="sakura"></canvas>
-
 <header>
   <div><a class="back-btn" href="eisakubun.html">← テーマ一覧へ</a></div>
   <h1 id="pageTitle">🌸 英作文復習</h1>
-  <p id="pageSubtitle">問題を選んでください</p>
+  <p id="pageSubtitle">単元を選んでください</p>
 </header>
-
-<main id="mainContent">
-  <p class="loading-msg">読み込み中...</p>
-</main>
+<main id="mainContent"><p class="loading-msg">読み込み中...</p></main>
 
 <script>
-const CSV_PATH = 'eisakubun.csv';
-const params   = new URLSearchParams(location.search);
-const filterTag = params.get('tag') || '';
+const MASTER_CSV   = 'eisakubun.csv';
+const SCORE_PREFIX = 'eisakubun_score_';
+const params       = new URLSearchParams(location.search);
+const filterTag    = params.get('tag') || '';
 
-async function loadCSV() {
+async function load() {
   try {
-    const res  = await fetch(CSV_PATH + '?v=' + Date.now());
+    const res  = await fetch(MASTER_CSV + '?v=' + Date.now());
     const text = await res.text();
     const lines = text.trim().split('\n').slice(1).filter(l => l.trim());
 
-    const all = lines.map((line, i) => {
-      const cols = parseCSVLine(line);
-      return {
-        id:    i,
-        title: cols[0]?.trim() || '',
-        tag:   cols[1]?.trim() || 'その他',
-        ja:    cols[2]?.trim() || '',
-        en:    cols[3]?.trim() || '',
-      };
-    }).filter(c => c.ja && c.en);
+    const units = lines.map(line => {
+      const cols = parseCSV(line);
+      return { tag: cols[0]?.trim(), name: cols[1]?.trim(), file: cols[2]?.trim() };
+    }).filter(u => u.tag === filterTag);
 
-    const cards = filterTag ? all.filter(c => c.tag === filterTag) : all;
+    document.getElementById('pageTitle').textContent  = '🌸 ' + filterTag;
+    document.getElementById('pageSubtitle').textContent = '全' + units.length + '単元';
 
-    document.getElementById('pageTitle').textContent = '🌸 ' + (filterTag || '英作文復習');
-    document.getElementById('pageSubtitle').textContent = '全' + cards.length + '問 ／ 問題を選んでください';
+    const main = document.getElementById('mainContent');
+    const grid = document.createElement('div');
+    grid.className = 'grid';
 
-    renderList(cards);
-  } catch (e) {
-    document.getElementById('mainContent').innerHTML =
-      '<p class="error-msg">CSVの読み込みに失敗しました。</p>';
+    units.forEach((unit, idx) => {
+      const scoreData = JSON.parse(localStorage.getItem(SCORE_PREFIX + unit.file) || 'null');
+      const pct   = scoreData ? scoreData.best  : 0;
+      const count = scoreData ? scoreData.count : 0;
+
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = 'eisakubun_detail.html?file=' + encodeURIComponent(unit.file) + '&name=' + encodeURIComponent(unit.name) + '&tag=' + encodeURIComponent(unit.tag);
+      card.innerHTML =
+        '<span class="card-number">No.' + String(idx + 1).padStart(2, '0') + '</span>' +
+        '<span class="card-title">' + unit.name + '</span>' +
+        '<span class="card-tag">' + unit.tag + '</span>' +
+        '<div class="progress-wrap"><div class="progress-bar" data-pct="' + pct + '" style="width:0%"></div></div>' +
+        '<span class="progress-label">' + (count > 0 ? '最高 ' + pct + '％ ／ ' + count + '回挑戦' : '未挑戦') + '</span>';
+      grid.appendChild(card);
+    });
+
+    main.innerHTML = '';
+    main.appendChild(grid);
+
+    setTimeout(() => {
+      document.querySelectorAll('.progress-bar[data-pct]').forEach(b => { b.style.width = b.dataset.pct + '%'; });
+    }, 100);
+  } catch(e) {
+    document.getElementById('mainContent').innerHTML = '<p class="error-msg">読み込みに失敗しました。</p>';
   }
 }
 
-function parseCSVLine(line) {
+function parseCSV(line) {
   const cols = []; let cur = '', inQ = false;
   for (let i = 0; i < line.length; i++) {
     const ch = line[i];
@@ -131,60 +107,17 @@ function parseCSVLine(line) {
   return cols;
 }
 
-function renderList(cards) {
-  const main = document.getElementById('mainContent');
-  const grid = document.createElement('div');
-  grid.className = 'grid';
+load();
 
-  cards.forEach((item, idx) => {
-    const card = document.createElement('a');
-    card.className = 'card';
-    card.href = 'eisakubun_detail.html?id=' + item.id;
-
-    card.innerHTML =
-      '<span class="card-number">No.' + String(idx + 1).padStart(2, '0') + '</span>' +
-      '<span class="card-title">' + item.title + '</span>' +
-      '<span class="card-preview">' + item.ja + '</span>' +
-      '<span class="card-tag">' + item.tag + '</span>';
-
-    grid.appendChild(card);
-  });
-
-  main.innerHTML = '';
-  main.appendChild(grid);
-}
-
-loadCSV();
-
-// 桜アニメーション
-const canvas = document.getElementById('sakura');
-const ctx    = canvas.getContext('2d');
+// 桜
+const canvas = document.getElementById('sakura'), ctx = canvas.getContext('2d');
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resize(); window.addEventListener('resize', resize);
 const petals = [];
-function randomPetal() {
-  return { x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height,
-    size: Math.random()*8+6, speedY: Math.random()*1.2+0.6, speedX: Math.random()*0.8-0.4,
-    angle: Math.random()*Math.PI*2, spin: (Math.random()-0.5)*0.04,
-    opacity: Math.random()*0.5+0.4, swing: Math.random()*0.8+0.3,
-    swingOffset: Math.random()*Math.PI*2, tick: 0 };
-}
-for (let i = 0; i < 40; i++) { const p = randomPetal(); p.y = Math.random()*canvas.height; petals.push(p); }
-function drawPetal(p) {
-  ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle); ctx.globalAlpha = p.opacity;
-  ctx.beginPath(); ctx.ellipse(0,0,p.size*.5,p.size,0,0,Math.PI*2); ctx.fillStyle='#f8bbd0'; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(0,0,p.size*.3,p.size*.7,.5,0,Math.PI*2); ctx.fillStyle='#fce4ec'; ctx.fill();
-  ctx.restore();
-}
-function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  petals.forEach(p => {
-    p.tick++; p.y+=p.speedY; p.x+=p.speedX+Math.sin(p.tick*.03+p.swingOffset)*p.swing; p.angle+=p.spin;
-    if (p.y > canvas.height+20) Object.assign(p, randomPetal());
-    drawPetal(p);
-  });
-  requestAnimationFrame(animate);
-}
+function rp() { return { x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height, size: Math.random()*8+6, speedY: Math.random()*1.2+0.6, speedX: Math.random()*0.8-0.4, angle: Math.random()*Math.PI*2, spin: (Math.random()-0.5)*0.04, opacity: Math.random()*0.5+0.4, swing: Math.random()*0.8+0.3, swingOffset: Math.random()*Math.PI*2, tick: 0 }; }
+for (let i=0;i<40;i++){const p=rp();p.y=Math.random()*canvas.height;petals.push(p);}
+function dp(p){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.globalAlpha=p.opacity;ctx.beginPath();ctx.ellipse(0,0,p.size*.5,p.size,0,0,Math.PI*2);ctx.fillStyle='#f8bbd0';ctx.fill();ctx.beginPath();ctx.ellipse(0,0,p.size*.3,p.size*.7,.5,0,Math.PI*2);ctx.fillStyle='#fce4ec';ctx.fill();ctx.restore();}
+function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);petals.forEach(p=>{p.tick++;p.y+=p.speedY;p.x+=p.speedX+Math.sin(p.tick*.03+p.swingOffset)*p.swing;p.angle+=p.spin;if(p.y>canvas.height+20)Object.assign(p,rp());dp(p);});requestAnimationFrame(animate);}
 animate();
 </script>
 </body>
