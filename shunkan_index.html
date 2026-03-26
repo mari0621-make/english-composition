@@ -222,6 +222,19 @@ async function loadCSV() {
     }).filter(c => c.ja && c.en);
 
     if (cards.length === 0) throw new Error('問題が見つかりません');
+
+    // mode=wrong のときは×の問題だけに絞る
+    const params = new URLSearchParams(location.search);
+    if (params.get('mode') === 'wrong') {
+      const wrongIds = getWrongIds();
+      cards = cards.filter(c => wrongIds.includes(c.id));
+      if (cards.length === 0) {
+        alert('できなかった問題がありません。');
+        location.href = 'shunkan_menu.html';
+        return;
+      }
+    }
+
     loadCard();
   } catch (e) {
     document.getElementById('jaText').innerHTML =
