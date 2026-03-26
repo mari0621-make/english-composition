@@ -19,11 +19,7 @@
     padding: 30px 20px 60px;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 28px;
-    width: 100%;
-  }
+  header { text-align: center; margin-bottom: 28px; width: 100%; }
 
   .back-btn {
     display: inline-block;
@@ -40,18 +36,9 @@
   header h1 { font-size: 1.5em; color: #333; margin-top: 4px; }
   header p  { color: #999; font-size: 0.85em; margin-top: 4px; }
 
-  .progress-info {
-    font-size: 0.85em;
-    color: #aaa;
-    margin-bottom: 6px;
-    text-align: center;
-  }
+  .progress-info { font-size: 0.85em; color: #aaa; margin-bottom: 6px; text-align: center; }
 
-  .card-wrap {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 24px;
-  }
+  .card-wrap { width: 100%; max-width: 500px; margin-bottom: 24px; }
 
   .card {
     width: 100%;
@@ -66,22 +53,12 @@
     justify-content: center;
     text-align: center;
     cursor: pointer;
-    position: relative;
-    transition: box-shadow 0.2s;
     border: 1.5px solid #e8edf2;
+    transition: box-shadow 0.2s;
   }
 
   .card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
-
-  .card-label {
-    font-size: 0.72em;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #bbb;
-    margin-bottom: 16px;
-  }
-
+  .card-label { font-size: 0.72em; font-weight: bold; letter-spacing: 0.1em; color: #bbb; margin-bottom: 16px; }
   .ja-text { font-size: 1.15em; color: #222; line-height: 1.8; font-weight: 700; }
 
   .en-text {
@@ -100,122 +77,66 @@
   }
 
   .en-text.visible { opacity: 1; max-height: 200px; }
-
   .tap-hint { font-size: 0.78em; color: #ccc; margin-top: 18px; }
 
-  /* タイマー */
-  .timer-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
+  .timer-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
   .timer-svg { transform: rotate(-90deg); }
   .timer-bg  { fill: none; stroke: #e8edf2; stroke-width: 5; }
   .timer-ring {
-    fill: none;
-    stroke: #4a90d9;
-    stroke-width: 5;
+    fill: none; stroke: #4a90d9; stroke-width: 5;
     stroke-linecap: round;
     transition: stroke-dashoffset 1s linear, stroke 0.5s;
   }
-
   .timer-text { font-size: 1.1em; font-weight: bold; color: #333; margin-top: 6px; }
 
-  /* ○×ボタン（英語表示後に出る） */
-  .judge-row {
-    display: none;
-    gap: 16px;
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 14px;
-  }
-
+  .judge-row { display: none; gap: 16px; width: 100%; max-width: 500px; margin-bottom: 14px; }
   .judge-row.show { display: flex; }
 
   .btn-judge {
-    flex: 1;
-    padding: 14px 0;
-    border: none;
-    border-radius: 14px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    font-family: 'Noto Sans JP', sans-serif;
-    transition: transform 0.1s;
+    flex: 1; padding: 14px 0; border: none; border-radius: 14px;
+    font-size: 1.2em; font-weight: bold; cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif; transition: transform 0.1s;
   }
-
   .btn-judge:active { transform: scale(0.96); }
   .btn-circle { background: #e8f5e9; color: #2e7d32; }
   .btn-cross  { background: #ffebee; color: #c62828; }
 
-  /* 下部ボタン */
-  .btn-row {
-    display: flex;
-    gap: 12px;
-    width: 100%;
-    max-width: 500px;
-    justify-content: center;
-    margin-bottom: 16px;
-  }
+  .btn-row { display: flex; gap: 12px; width: 100%; max-width: 500px; margin-bottom: 16px; }
 
   .btn {
-    flex: 1;
-    padding: 13px 0;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.95em;
-    font-weight: bold;
-    cursor: pointer;
-    font-family: 'Noto Sans JP', sans-serif;
-    transition: transform 0.1s;
+    flex: 1; padding: 13px 0; border: none; border-radius: 12px;
+    font-size: 0.95em; font-weight: bold; cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif; transition: transform 0.1s;
   }
-
   .btn:active { transform: scale(0.97); }
   .btn-reveal { background: #2a6ebb; color: white; }
   .btn-reset  { background: #eee; color: #777; flex: 0 0 auto; padding: 13px 20px; }
 
-  /* 完了画面 */
   .complete {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-    margin-top: 40px;
-    width: 100%;
-    max-width: 400px;
+    display: none; flex-direction: column; align-items: center;
+    text-align: center; gap: 16px; margin-top: 40px; width: 100%; max-width: 400px;
   }
-
   .complete.show { display: flex; }
   .complete h2 { font-size: 1.6em; color: #333; }
   .complete p  { color: #888; font-size: 0.95em; }
 
-  .complete-btns {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-  }
+  .complete-btns { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
   .btn-complete {
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.95em;
-    font-weight: bold;
-    cursor: pointer;
+    padding: 14px; border: none; border-radius: 12px;
+    font-size: 0.95em; font-weight: bold; cursor: pointer;
     font-family: 'Noto Sans JP', sans-serif;
+    text-decoration: none; text-align: center; display: block;
     transition: transform 0.1s;
-    text-decoration: none;
-    text-align: center;
-    display: block;
   }
-
   .btn-complete:active { transform: scale(0.97); }
   .btn-retry { background: #FFD700; color: #333; }
   .btn-back  { background: #eee; color: #555; }
+
+  /* ローディング */
+  .loading {
+    color: #aaa; font-size: 0.95em; margin-top: 60px; text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -226,14 +147,13 @@
   <p>日本語を見て英語に変換しよう</p>
 </header>
 
-<div class="progress-info" id="progressInfo">1 / 6</div>
+<div class="progress-info" id="progressInfo"></div>
 
 <div class="timer-wrap">
   <svg class="timer-svg" width="70" height="70" viewBox="0 0 70 70">
     <circle class="timer-bg" cx="35" cy="35" r="28"/>
     <circle class="timer-ring" id="timerRing" cx="35" cy="35" r="28"
-      stroke-dasharray="175.9"
-      stroke-dashoffset="0"/>
+      stroke-dasharray="175.9" stroke-dashoffset="0"/>
   </svg>
   <div class="timer-text" id="timerText">60</div>
 </div>
@@ -241,13 +161,12 @@
 <div class="card-wrap">
   <div class="card" id="mainCard" onclick="revealAnswer()">
     <div class="card-label">日本語 → 英語</div>
-    <div class="ja-text" id="jaText"></div>
+    <div class="ja-text" id="jaText"><span class="loading">問題を読み込み中...</span></div>
     <div class="en-text" id="enText"></div>
-    <div class="tap-hint" id="tapHint">タップして英語を確認</div>
+    <div class="tap-hint" id="tapHint" style="display:none">タップして英語を確認</div>
   </div>
 </div>
 
-<!-- ○×ボタン（英語表示後に出現） -->
 <div class="judge-row" id="judgeRow">
   <button class="btn-judge btn-circle" onclick="judge(true)">○ できた</button>
   <button class="btn-judge btn-cross"  onclick="judge(false)">× できなかった</button>
@@ -269,31 +188,52 @@
 </div>
 
 <script>
-const WRONG_KEY = 'shunkan_wrong'; // shunkan_menu.html と共通のキー
+const WRONG_KEY = 'shunkan_wrong';
+const CSV_PATH  = 'cards.csv'; // ← CSVファイルのパス（同じフォルダに置く）
 
-const cards = [
-  { id: 0, ja: '仕事を変えたいので英語を勉強しています。そのためにはTOEICで800点が必要です。しかし前回のテストで795点しか取れず、本当に悔しかったです。', en: "Because I want to change jobs, I'm studying English. To do that, I need a TOEIC score of 800. However, I got 795 on the last TOEIC test and I was really frustrated." },
-  { id: 1, ja: 'フリートークしましょう。', en: 'Can we have a free conversation?' },
-  { id: 2, ja: '実際のところ、あまり楽しめていません。上司がとても厳しく、仕事が難しいし、自分に合っていないと思います。', en: "Actually I don't really enjoy it, because my boss is very strict, the work is difficult, and I don't think it's a good fit for me." },
-  { id: 3, ja: '仕事でほとんど英語を使わなくなりました。', en: 'No, I hardly use English at work anymore.' },
-  { id: 4, ja: '最も難しい仕事はマネージャーだと思います。人をモチベートしてマネジメントしなければならないからです。でもとてもやりがいがあると思います。', en: "I think being a manager is the most difficult, because you have to motivate and manage people. But I think it's very rewarding." },
-  { id: 5, ja: 'たとえお金が十分にあっても、働き続けたいと思います。', en: 'Even if I had enough money, I would still want to work.' },
-];
-
-let current = 0;
-let timer = null;
-let seconds = 60;
-const TOTAL = 60;
 const circumference = 175.9;
+const TOTAL = 60;
 
-// localStorage から×リストを取得・保存
-function getWrongIds() {
-  return JSON.parse(localStorage.getItem(WRONG_KEY) || '[]');
-}
-function saveWrongIds(ids) {
-  localStorage.setItem(WRONG_KEY, JSON.stringify(ids));
+let cards   = [];
+let current = 0;
+let timer   = null;
+let seconds = TOTAL;
+
+// ── CSV読み込み ──────────────────────────
+async function loadCSV() {
+  try {
+    const res = await fetch(CSV_PATH + '?v=' + Date.now()); // キャッシュ回避
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    // 1行目はヘッダー（日本語,英語）なのでスキップ
+    cards = lines.slice(1).map((line, i) => {
+      // カンマ区切りだが、文中にカンマがある場合も考慮
+      const match = line.match(/^"?(.+?)"?,(.+)$/) || line.split(',');
+      let ja, en;
+      if (Array.isArray(match) && match[0] !== undefined && match.length > 2) {
+        ja = match[1].trim();
+        en = match[2].trim();
+      } else {
+        const idx = line.indexOf(',');
+        ja = line.slice(0, idx).trim().replace(/^"|"$/g, '');
+        en = line.slice(idx + 1).trim().replace(/^"|"$/g, '');
+      }
+      return { id: i, ja, en };
+    }).filter(c => c.ja && c.en);
+
+    if (cards.length === 0) throw new Error('問題が見つかりません');
+    loadCard();
+  } catch (e) {
+    document.getElementById('jaText').innerHTML =
+      `<span style="color:#e05555;font-size:0.9em;">CSVの読み込みに失敗しました。<br>cards.csv が同じフォルダにあるか確認してください。</span>`;
+  }
 }
 
+// ── localStorage ─────────────────────────
+function getWrongIds() { return JSON.parse(localStorage.getItem(WRONG_KEY) || '[]'); }
+function saveWrongIds(ids) { localStorage.setItem(WRONG_KEY, JSON.stringify(ids)); }
+
+// ── カード表示 ───────────────────────────
 function loadCard() {
   const c = cards[current];
   document.getElementById('jaText').textContent = c.ja;
@@ -314,17 +254,14 @@ function startTimer() {
   timer = setInterval(() => {
     seconds--;
     updateTimer();
-    if (seconds <= 0) {
-      clearInterval(timer);
-      revealAnswer();
-    }
+    if (seconds <= 0) { clearInterval(timer); revealAnswer(); }
   }, 1000);
 }
 
 function updateTimer() {
-  const ratio = seconds / TOTAL;
+  const ratio  = seconds / TOTAL;
   const offset = circumference * (1 - ratio);
-  const ring = document.getElementById('timerRing');
+  const ring   = document.getElementById('timerRing');
   ring.style.strokeDashoffset = offset;
   ring.style.stroke = seconds > 20 ? '#4a90d9' : seconds > 10 ? '#f0a500' : '#e05555';
   document.getElementById('timerText').textContent = seconds;
@@ -334,29 +271,21 @@ function revealAnswer() {
   clearInterval(timer);
   document.getElementById('enText').classList.add('visible');
   document.getElementById('tapHint').style.display = 'none';
-  document.getElementById('judgeRow').classList.add('show'); // ○×ボタンを表示
+  document.getElementById('judgeRow').classList.add('show');
 }
 
 function judge(correct) {
-  const cardId = cards[current].id;
-  let wrongIds = getWrongIds();
-
+  const cardId  = cards[current].id;
+  let wrongIds  = getWrongIds();
   if (correct) {
-    // ○：×リストから削除
     wrongIds = wrongIds.filter(id => id !== cardId);
   } else {
-    // ×：リストに追加（重複なし）
     if (!wrongIds.includes(cardId)) wrongIds.push(cardId);
   }
   saveWrongIds(wrongIds);
-
   document.getElementById('judgeRow').classList.remove('show');
   current++;
-  if (current >= cards.length) {
-    showComplete();
-  } else {
-    loadCard();
-  }
+  if (current >= cards.length) { showComplete(); } else { loadCard(); }
 }
 
 function showComplete() {
@@ -365,11 +294,8 @@ function showComplete() {
   document.getElementById('judgeRow').classList.remove('show');
   document.getElementById('progressInfo').textContent = '完了！';
   document.getElementById('completeScreen').classList.add('show');
-
-  const wrongIds = getWrongIds();
-  const wrongCount = wrongIds.length;
-  document.getElementById('completeMsg').textContent =
-    `現在の × リスト：${wrongCount}問`;
+  const wrongCount = getWrongIds().length;
+  document.getElementById('completeMsg').textContent = `現在の × リスト：${wrongCount}問`;
 }
 
 function resetAll() {
@@ -380,7 +306,8 @@ function resetAll() {
   loadCard();
 }
 
-loadCard();
+// 起動時にCSVを読み込む
+loadCSV();
 </script>
 
 </body>
