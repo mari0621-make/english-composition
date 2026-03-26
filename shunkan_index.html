@@ -37,17 +37,8 @@
     margin-bottom: 16px;
   }
 
-  header h1 {
-    font-size: 1.5em;
-    color: #333;
-    margin-top: 4px;
-  }
-
-  header p {
-    color: #999;
-    font-size: 0.85em;
-    margin-top: 4px;
-  }
+  header h1 { font-size: 1.5em; color: #333; margin-top: 4px; }
+  header p  { color: #999; font-size: 0.85em; margin-top: 4px; }
 
   .progress-info {
     font-size: 0.85em;
@@ -59,7 +50,6 @@
   .card-wrap {
     width: 100%;
     max-width: 500px;
-    perspective: 1000px;
     margin-bottom: 24px;
   }
 
@@ -81,9 +71,7 @@
     border: 1.5px solid #e8edf2;
   }
 
-  .card:hover {
-    box-shadow: 0 8px 28px rgba(0,0,0,0.14);
-  }
+  .card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
 
   .card-label {
     font-size: 0.72em;
@@ -94,12 +82,7 @@
     margin-bottom: 16px;
   }
 
-  .ja-text {
-    font-size: 1.15em;
-    color: #222;
-    line-height: 1.8;
-    font-weight: 700;
-  }
+  .ja-text { font-size: 1.15em; color: #222; line-height: 1.8; font-weight: 700; }
 
   .en-text {
     font-family: 'Lato', sans-serif;
@@ -116,18 +99,11 @@
     transition: opacity 0.5s, max-height 0.5s;
   }
 
-  .en-text.visible {
-    opacity: 1;
-    max-height: 200px;
-  }
+  .en-text.visible { opacity: 1; max-height: 200px; }
 
-  .tap-hint {
-    font-size: 0.78em;
-    color: #ccc;
-    margin-top: 18px;
-  }
+  .tap-hint { font-size: 0.78em; color: #ccc; margin-top: 18px; }
 
-  /* タイマーリング */
+  /* タイマー */
   .timer-wrap {
     display: flex;
     flex-direction: column;
@@ -135,16 +111,8 @@
     margin-bottom: 20px;
   }
 
-  .timer-svg {
-    transform: rotate(-90deg);
-  }
-
-  .timer-bg {
-    fill: none;
-    stroke: #e8edf2;
-    stroke-width: 5;
-  }
-
+  .timer-svg { transform: rotate(-90deg); }
+  .timer-bg  { fill: none; stroke: #e8edf2; stroke-width: 5; }
   .timer-ring {
     fill: none;
     stroke: #4a90d9;
@@ -153,14 +121,36 @@
     transition: stroke-dashoffset 1s linear, stroke 0.5s;
   }
 
-  .timer-text {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
-    margin-top: 6px;
+  .timer-text { font-size: 1.1em; font-weight: bold; color: #333; margin-top: 6px; }
+
+  /* ○×ボタン（英語表示後に出る） */
+  .judge-row {
+    display: none;
+    gap: 16px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 14px;
   }
 
-  /* ボタン */
+  .judge-row.show { display: flex; }
+
+  .btn-judge {
+    flex: 1;
+    padding: 14px 0;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: transform 0.1s;
+  }
+
+  .btn-judge:active { transform: scale(0.96); }
+  .btn-circle { background: #e8f5e9; color: #2e7d32; }
+  .btn-cross  { background: #ffebee; color: #c62828; }
+
+  /* 下部ボタン */
   .btn-row {
     display: flex;
     gap: 12px;
@@ -179,27 +169,12 @@
     font-weight: bold;
     cursor: pointer;
     font-family: 'Noto Sans JP', sans-serif;
-    transition: transform 0.1s, opacity 0.1s;
+    transition: transform 0.1s;
   }
 
   .btn:active { transform: scale(0.97); }
-
-  .btn-reveal {
-    background: #2a6ebb;
-    color: white;
-  }
-
-  .btn-next {
-    background: #FFD700;
-    color: #333;
-  }
-
-  .btn-reset {
-    background: #eee;
-    color: #777;
-    flex: 0 0 auto;
-    padding: 13px 20px;
-  }
+  .btn-reveal { background: #2a6ebb; color: white; }
+  .btn-reset  { background: #eee; color: #777; flex: 0 0 auto; padding: 13px 20px; }
 
   /* 完了画面 */
   .complete {
@@ -209,25 +184,44 @@
     text-align: center;
     gap: 16px;
     margin-top: 40px;
+    width: 100%;
+    max-width: 400px;
   }
 
   .complete.show { display: flex; }
+  .complete h2 { font-size: 1.6em; color: #333; }
+  .complete p  { color: #888; font-size: 0.95em; }
 
-  .complete h2 {
-    font-size: 1.6em;
-    color: #333;
+  .complete-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
   }
 
-  .complete p {
-    color: #888;
+  .btn-complete {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
     font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: transform 0.1s;
+    text-decoration: none;
+    text-align: center;
+    display: block;
   }
+
+  .btn-complete:active { transform: scale(0.97); }
+  .btn-retry { background: #FFD700; color: #333; }
+  .btn-back  { background: #eee; color: #555; }
 </style>
 </head>
 <body>
 
 <header>
-  <div><a class="back-btn" href="index.html">← TOPへ戻る</a></div>
+  <div><a class="back-btn" href="shunkan_menu.html">← メニューへ戻る</a></div>
   <h1>⚡ 瞬間英作文</h1>
   <p>日本語を見て英語に変換しよう</p>
 </header>
@@ -253,45 +247,37 @@
   </div>
 </div>
 
+<!-- ○×ボタン（英語表示後に出現） -->
+<div class="judge-row" id="judgeRow">
+  <button class="btn-judge btn-circle" onclick="judge(true)">○ できた</button>
+  <button class="btn-judge btn-cross"  onclick="judge(false)">× できなかった</button>
+</div>
+
 <div class="btn-row">
   <button class="btn btn-reveal" onclick="revealAnswer()">英語を見る</button>
-  <button class="btn btn-next" onclick="nextCard()">次へ →</button>
-  <button class="btn btn-reset" onclick="resetAll()">↺</button>
+  <button class="btn btn-reset"  onclick="if(confirm('リセットしますか？')) resetAll()">↺</button>
 </div>
 
 <div class="complete" id="completeScreen">
   <div style="font-size:2.5em">🎉</div>
   <h2>お疲れさまでした！</h2>
-  <p>全 6 問を終了しました。</p>
-  <button class="btn btn-next" style="max-width:200px; padding:13px 32px;" onclick="resetAll()">もう一度挑戦</button>
+  <p id="completeMsg"></p>
+  <div class="complete-btns">
+    <button class="btn-complete btn-retry" onclick="resetAll()">↺ もう一度挑戦</button>
+    <a class="btn-complete btn-back" href="shunkan_menu.html">← メニューへ戻る</a>
+  </div>
 </div>
 
 <script>
+const WRONG_KEY = 'shunkan_wrong'; // shunkan_menu.html と共通のキー
+
 const cards = [
-  {
-    ja: '仕事を変えたいので英語を勉強しています。そのためにはTOEICで800点が必要です。しかし前回のテストで795点しか取れず、本当に悔しかったです。',
-    en: 'Because I want to change jobs, I\'m studying English. To do that, I need a TOEIC score of 800. However, I got 795 on the last TOEIC test and I was really frustrated.'
-  },
-  {
-    ja: 'フリートークしましょう。',
-    en: 'Can we have a free conversation?'
-  },
-  {
-    ja: '実際のところ、あまり楽しめていません。上司がとても厳しく、仕事が難しいし、自分に合っていないと思います。',
-    en: 'Actually I don\'t really enjoy it, because my boss is very strict, the work is difficult, and I don\'t think it\'s a good fit for me.'
-  },
-  {
-    ja: '仕事でほとんど英語を使わなくなりました。',
-    en: 'No, I hardly use English at work anymore.'
-  },
-  {
-    ja: '最も難しい仕事はマネージャーだと思います。人をモチベートしてマネジメントしなければならないからです。でもとてもやりがいがあると思います。',
-    en: 'I think being a manager is the most difficult, because you have to motivate and manage people. But I think it\'s very rewarding.'
-  },
-  {
-    ja: 'たとえお金が十分にあっても、働き続けたいと思います。',
-    en: 'Even if I had enough money, I would still want to work.'
-  },
+  { id: 0, ja: '仕事を変えたいので英語を勉強しています。そのためにはTOEICで800点が必要です。しかし前回のテストで795点しか取れず、本当に悔しかったです。', en: "Because I want to change jobs, I'm studying English. To do that, I need a TOEIC score of 800. However, I got 795 on the last TOEIC test and I was really frustrated." },
+  { id: 1, ja: 'フリートークしましょう。', en: 'Can we have a free conversation?' },
+  { id: 2, ja: '実際のところ、あまり楽しめていません。上司がとても厳しく、仕事が難しいし、自分に合っていないと思います。', en: "Actually I don't really enjoy it, because my boss is very strict, the work is difficult, and I don't think it's a good fit for me." },
+  { id: 3, ja: '仕事でほとんど英語を使わなくなりました。', en: 'No, I hardly use English at work anymore.' },
+  { id: 4, ja: '最も難しい仕事はマネージャーだと思います。人をモチベートしてマネジメントしなければならないからです。でもとてもやりがいがあると思います。', en: "I think being a manager is the most difficult, because you have to motivate and manage people. But I think it's very rewarding." },
+  { id: 5, ja: 'たとえお金が十分にあっても、働き続けたいと思います。', en: 'Even if I had enough money, I would still want to work.' },
 ];
 
 let current = 0;
@@ -300,12 +286,21 @@ let seconds = 60;
 const TOTAL = 60;
 const circumference = 175.9;
 
+// localStorage から×リストを取得・保存
+function getWrongIds() {
+  return JSON.parse(localStorage.getItem(WRONG_KEY) || '[]');
+}
+function saveWrongIds(ids) {
+  localStorage.setItem(WRONG_KEY, JSON.stringify(ids));
+}
+
 function loadCard() {
   const c = cards[current];
   document.getElementById('jaText').textContent = c.ja;
   document.getElementById('enText').textContent = c.en;
   document.getElementById('enText').classList.remove('visible');
   document.getElementById('tapHint').style.display = '';
+  document.getElementById('judgeRow').classList.remove('show');
   document.getElementById('progressInfo').textContent = `${current + 1} / ${cards.length}`;
   document.getElementById('mainCard').style.display = 'flex';
   document.getElementById('completeScreen').classList.remove('show');
@@ -336,27 +331,52 @@ function updateTimer() {
 }
 
 function revealAnswer() {
+  clearInterval(timer);
   document.getElementById('enText').classList.add('visible');
   document.getElementById('tapHint').style.display = 'none';
-  clearInterval(timer);
+  document.getElementById('judgeRow').classList.add('show'); // ○×ボタンを表示
 }
 
-function nextCard() {
-  clearInterval(timer);
+function judge(correct) {
+  const cardId = cards[current].id;
+  let wrongIds = getWrongIds();
+
+  if (correct) {
+    // ○：×リストから削除
+    wrongIds = wrongIds.filter(id => id !== cardId);
+  } else {
+    // ×：リストに追加（重複なし）
+    if (!wrongIds.includes(cardId)) wrongIds.push(cardId);
+  }
+  saveWrongIds(wrongIds);
+
+  document.getElementById('judgeRow').classList.remove('show');
   current++;
   if (current >= cards.length) {
-    document.getElementById('mainCard').style.display = 'none';
-    document.getElementById('progressInfo').textContent = '完了！';
-    document.getElementById('completeScreen').classList.add('show');
-    return;
+    showComplete();
+  } else {
+    loadCard();
   }
-  loadCard();
+}
+
+function showComplete() {
+  clearInterval(timer);
+  document.getElementById('mainCard').style.display = 'none';
+  document.getElementById('judgeRow').classList.remove('show');
+  document.getElementById('progressInfo').textContent = '完了！';
+  document.getElementById('completeScreen').classList.add('show');
+
+  const wrongIds = getWrongIds();
+  const wrongCount = wrongIds.length;
+  document.getElementById('completeMsg').textContent =
+    `現在の × リスト：${wrongCount}問`;
 }
 
 function resetAll() {
   current = 0;
   document.getElementById('mainCard').style.display = 'flex';
   document.getElementById('completeScreen').classList.remove('show');
+  document.getElementById('judgeRow').classList.remove('show');
   loadCard();
 }
 
