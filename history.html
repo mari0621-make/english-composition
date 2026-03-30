@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学習履歴</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: sans-serif; background: #f5f7fa; min-height: 100vh; padding: 40px 20px 60px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; max-width: 520px; margin: 0 auto 28px; }
+  header h1 { font-size: 1.3em; color: #333; font-weight: bold; }
+  .back-btn { background: #f0f0f0; border-radius: 8px; padding: 6px 14px; font-size: 0.82em; color: #555; text-decoration: none; }
+
+  .card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); border: 1px solid #e8edf2; max-width: 520px; margin: 0 auto 20px; }
+  .card-title { font-size: 0.85em; color: #888; margin-bottom: 14px; font-weight: bold; }
+
+  /* サマリー */
+  .summary-row { display: flex; gap: 12px; }
+  .summary-box { flex: 1; background: #f7f9fc; border-radius: 10px; padding: 14px 10px; text-align: center; }
+  .summary-val { font-size: 1.5em; font-weight: bold; color: #333; }
+  .summary-val span { font-size: 0.6em; color: #888; margin-left: 2px; }
+  .summary-lbl { font-size: 0.72em; color: #aaa; margin-top: 4px; }
+
+  /* 棒グラフ */
+  .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 110px; padding: 0 4px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar-wrap { width: 100%; flex: 1; display: flex; align-items: flex-end; }
+  .bar { width: 100%; border-radius: 4px 4px 0 0; background: #f7c948; min-height: 4px; }
+  .bar.empty { background: #e8edf2; }
+  .bar-lbl { font-size: 0.62em; color: #aaa; white-space: nowrap; }
+  .bar-val { font-size: 0.65em; color: #888; }
+
+  /* タスク別学習時間 */
+  .task-rank { display: flex; flex-direction: column; gap: 10px; }
+  .task-rank-item { display: flex; flex-direction: column; gap: 4px; }
+  .task-rank-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .task-rank-name { font-size: 0.85em; color: #333; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+  .task-rank-time { font-size: 0.78em; color: #f7a800; font-weight: bold; white-space: nowrap; }
+  .task-rank-bar-bg { background: #f0f0f0; border-radius: 4px; height: 7px; overflow: hidden; }
+  .task-rank-bar-fill { height: 100%; background: #f7c948; border-radius: 4px; }
+
+  /* タイムライン */
+  .timeline { display: flex; flex-direction: column; }
+  .tl-item { border-bottom: 1px solid #f0f0f0; padding: 12px 0; cursor: pointer; }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-header { display: flex; gap: 14px; align-items: center; }
+  .tl-date { font-size: 0.8em; color: #aaa; white-space: nowrap; min-width: 64px; }
+  .tl-body { flex: 1; }
+  .tl-label { font-size: 0.82em; color: #333; }
+  .tl-bar-bg { background: #f0f0f0; border-radius: 4px; height: 7px; overflow: hidden; margin-top: 6px; }
+  .tl-bar-fill { height: 100%; background: #f7c948; border-radius: 4px; }
+  .tl-toggle { font-size: 0.75em; color: #bbb; flex-shrink: 0; }
+
+  /* タイムライン内タスク展開 */
+  .tl-tasks { display: none; margin-top: 10px; padding-left: 74px; display: none; flex-direction: column; gap: 6px; }
+  .tl-tasks.open { display: flex; }
+  .tl-task-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.78em; }
+  .tl-task-name { color: #555; }
+  .tl-task-time { color: #aaa; }
+  .tl-task-done { color: #f7a800; font-weight: bold; }
+
+  .empty-msg { text-align: center; color: #bbb; font-size: 0.88em; padding: 30px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 学習履歴</h1>
+  <a class="back-btn" href="index.html">← TOPへ</a>
+</header>
+
+<!-- サマリー -->
+<div class="card">
+  <div class="card-title">累計サマリー</div>
+  <div class="summary-row">
+    <div class="summary-box">
+      <div class="summary-val" id="total-min">0<span>分</span></div>
+      <div class="summary-lbl">総学習時間</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-val" id="total-days">0<span>日</span></div>
+      <div class="summary-lbl">学習日数</div>
+    </div>
+  </div>
+</div>
+
+<!-- 棒グラフ（直近7日） -->
+<div class="card">
+  <div class="card-title">直近7日間の学習時間（分）</div>
+  <div class="bar-chart" id="bar-chart"></div>
+</div>
+
+<!-- タスク別学習時間 -->
+<div class="card">
+  <div class="card-title">タスク別学習時間（全期間・完了分のみ）</div>
+  <div class="task-rank" id="task-rank"></div>
+</div>
+
+<!-- タイムライン -->
+<div class="card">
+  <div class="card-title">日別タイムライン <span style="font-size:0.8em;font-weight:normal;color:#bbb;">（タップで詳細）</span></div>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<script>
+  const history = JSON.parse(localStorage.getItem('study_history') || '[]');
+
+  // 今日の途中データ
+  const todayTasks = JSON.parse(localStorage.getItem('tasks_today') || '[]');
+  const todayDate  = new Date().toDateString();
+  const todayRecord = todayTasks.length > 0 ? {
+    date:        todayDate,
+    totalMin:    todayTasks.reduce((s, t) => s + (t.time || 0), 0),
+    doneMin:     todayTasks.filter(t => t.done).reduce((s, t) => s + (t.time || 0), 0),
+    total:       todayTasks.length,
+    done:        todayTasks.filter(t => t.done).length,
+    taskDetails: todayTasks.map(t => ({ name: t.name, time: t.time || 0, done: t.done })),
+    isToday:     true
+  } : null;
+
+  let allData = [...history.filter(h => h.date !== todayDate)];
+  if (todayRecord) allData.push(todayRecord);
+  allData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // --- サマリー ---
+  const sumMin = allData.reduce((s, h) => s + h.doneMin, 0);
+  document.getElementById('total-min').innerHTML  = sumMin + '<span>分</span>';
+  document.getElementById('total-days').innerHTML = allData.length + '<span>日</span>';
+
+  // --- 棒グラフ（直近7日） ---
+  const barChart = document.getElementById('bar-chart');
+  const last7 = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toDateString();
+    const rec = allData.find(h => h.date === key);
+    last7.push({ label: (d.getMonth()+1) + '/' + d.getDate(), doneMin: rec ? rec.doneMin : 0 });
+  }
+  const maxMin = Math.max(...last7.map(d => d.doneMin), 1);
+  last7.forEach(d => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const pct = Math.round((d.doneMin / maxMin) * 100);
+    col.innerHTML = `
+      <div class="bar-val">${d.doneMin > 0 ? d.doneMin : ''}</div>
+      <div class="bar-wrap"><div class="bar${d.doneMin === 0 ? ' empty' : ''}" style="height:${Math.max(pct,4)}%"></div></div>
+      <div class="bar-lbl">${d.label}</div>`;
+    barChart.appendChild(col);
+  });
+
+  // --- タスク別学習時間集計 ---
+  const taskMap = {};
+  allData.forEach(h => {
+    (h.taskDetails || []).forEach(t => {
+      if (!t.done) return; // 完了タスクのみ
+      if (!taskMap[t.name]) taskMap[t.name] = 0;
+      taskMap[t.name] += t.time || 0;
+    });
+  });
+  const taskRankEl = document.getElementById('task-rank');
+  const taskEntries = Object.entries(taskMap).sort((a, b) => b[1] - a[1]);
+  if (taskEntries.length === 0) {
+    taskRankEl.innerHTML = '<div class="empty-msg">まだデータがありません</div>';
+  } else {
+    const maxTaskMin = taskEntries[0][1] || 1;
+    taskEntries.forEach(([name, min]) => {
+      const pct = Math.round((min / maxTaskMin) * 100);
+      const row = document.createElement('div');
+      row.className = 'task-rank-item';
+      row.innerHTML = `
+        <div class="task-rank-header">
+          <span class="task-rank-name">${name}</span>
+          <span class="task-rank-time">${min}分</span>
+        </div>
+        <div class="task-rank-bar-bg"><div class="task-rank-bar-fill" style="width:${pct}%"></div></div>`;
+      taskRankEl.appendChild(row);
+    });
+  }
+
+  // --- タイムライン ---
+  const tl = document.getElementById('timeline');
+  if (allData.length === 0) {
+    tl.innerHTML = '<div class="empty-msg">まだ履歴がありません</div>';
+  } else {
+    const maxTlMin = Math.max(...allData.map(h => h.doneMin), 1);
+    allData.forEach(h => {
+      const d = new Date(h.date);
+      const label = (d.getMonth()+1) + '/' + d.getDate() + (h.isToday ? ' (今日)' : '');
+      const pct   = Math.round((h.doneMin / maxTlMin) * 100);
+      const details = (h.taskDetails || []);
+
+      const item = document.createElement('div');
+      item.className = 'tl-item';
+
+      // タスク詳細HTML
+      const detailRows = details.length === 0 ? '<div style="font-size:0.78em;color:#ccc;">タスクデータなし</div>' :
+        details.map(t => `
+          <div class="tl-task-row">
+            <span class="tl-task-name">${t.name}</span>
+            <span>${t.done ? '<span class="tl-task-done">✓ </span>' : ''}<span class="tl-task-time">${t.time ? t.time + '分' : '-'}</span></span>
+          </div>`).join('');
+
+      item.innerHTML = `
+        <div class="tl-header">
+          <div class="tl-date">${label}</div>
+          <div class="tl-body">
+            <div class="tl-label">${h.doneMin}分 完了 / ${h.done}個</div>
+            <div class="tl-bar-bg"><div class="tl-bar-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="tl-toggle">▼</div>
+        </div>
+        <div class="tl-tasks">${detailRows}</div>`;
+
+      // タップで展開
+      item.querySelector('.tl-header').addEventListener('click', () => {
+        const tasks = item.querySelector('.tl-tasks');
+        const toggle = item.querySelector('.tl-toggle');
+        const isOpen = tasks.classList.toggle('open');
+        toggle.textContent = isOpen ? '▲' : '▼';
+      });
+
+      tl.appendChild(item);
+    });
+  }
+</script>
+</body>
+</html>

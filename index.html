@@ -61,8 +61,11 @@
 <body>
 
 <header>
-  <h1>✏️ 英語学習アプリ</h1>
-  <p>学習メニューを選んでください</p>
+  <div style="position:relative; max-width:520px; margin:0 auto;">
+    <h1 style="text-align:center;">✏️ 英語学習アプリ</h1>
+    <a href="history.html" style="position:absolute; right:0; top:50%; transform:translateY(-50%); background:#f7c948; border-radius:8px; padding:5px 12px; font-size:0.78em; font-weight:bold; color:#333; text-decoration:none;">📊 履歴</a>
+  </div>
+  <p style="text-align:center;">学習メニューを選んでください</p>
 </header>
 
 <div class="task-widget">
@@ -125,11 +128,40 @@
 <script>
   let tasks = JSON.parse(localStorage.getItem('tasks_today') || '[]');
   const today = new Date().toDateString();
+
+  // 日付変わっていたら履歴に保存してリセット
   if (localStorage.getItem('tasks_date') !== today) {
+    saveToHistory();
     tasks = [];
     localStorage.setItem('tasks_date', today);
     localStorage.setItem('tasks_today', '[]');
   }
+
+  function saveToHistory() {
+    const prevTasks = JSON.parse(localStorage.getItem('tasks_today') || '[]');
+    const prevDate  = localStorage.getItem('tasks_date');
+    if (!prevDate || prevTasks.length === 0) return;
+    const totalMin = prevTasks.reduce((s, t) => s + (t.time || 0), 0);
+    const doneMin  = prevTasks.filter(t => t.done).reduce((s, t) => s + (t.time || 0), 0);
+    const total    = prevTasks.length;
+    const done     = prevTasks.filter(t => t.done).length;
+    // タスク別データも保存
+    const taskDetails = prevTasks.map(t => ({ name: t.name, time: t.time || 0, done: t.done }));
+    const record   = { date: prevDate, totalMin, doneMin, total, done, taskDetails };
+    const history  = JSON.parse(localStorage.getItem('study_history') || '[]');
+    const idx = history.findIndex(h => h.date === prevDate);
+    if (idx >= 0) history[idx] = record; else history.push(record);
+    localStorage.setItem('study_history', JSON.stringify(history));
+  }
+
+  // 0時になったら自動リセット
+  function scheduleReset() {
+    const now  = new Date();
+    const next = new Date(now);
+    next.setHours(24, 0, 0, 0);
+    setTimeout(() => { saveToHistory(); location.reload(); }, next - now);
+  }
+  scheduleReset();
 
   function saveTasks() { localStorage.setItem('tasks_today', JSON.stringify(tasks)); }
 
