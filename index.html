@@ -21,8 +21,14 @@
   .chart-center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 0.78em; font-weight: bold; color: #444; text-align: center; }
   .chart-label { margin-top: 8px; font-size: 0.72em; color: #888; }
   .task-list-area { flex: 1; padding: 14px 16px 14px 8px; display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
-  .task-item { display: flex; align-items: center; gap: 10px; background: #fff9e6; border: 1px solid #f0d97a; border-radius: 8px; padding: 8px 12px; transition: opacity 0.3s, transform 0.3s; }
-  .task-item.done { opacity: 0.35; text-decoration: line-through; transform: scale(0.97); }
+  /* スワイプ削除 */
+  .task-item-wrap { position: relative; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+  .task-delete-bg { position: absolute; inset: 0; background: #b0b8c1; display: flex; align-items: center; justify-content: flex-end; padding-right: 16px; border-radius: 8px; }
+  .task-delete-bg span { font-size: 1.4em; color: white; pointer-events: none; }
+  .task-item { display: flex; align-items: center; gap: 10px; background: #fff9e6; border: 1px solid #f0d97a; border-radius: 8px; padding: 8px 12px; transition: opacity 0.3s, transform 0.15s; position: relative; will-change: transform; touch-action: pan-y; user-select: none; }
+  .task-item.done { opacity: 0.35; text-decoration: line-through; }
+  .task-item.swiped { transform: translateX(64px); }
+  .task-item.removing { transition: transform 0.2s, opacity 0.2s, max-height 0.3s 0.15s; opacity: 0; max-height: 0; padding: 0; margin: 0; border: none; overflow: hidden; }
   .task-item input[type="checkbox"] { accent-color: #f7c948; width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
   .task-item-label { flex: 1; font-size: 0.88em; color: #333; }
   .task-item-time { font-size: 0.75em; color: #aaa; white-space: nowrap; }
@@ -151,8 +157,19 @@
     }
     list.innerHTML = '';
     tasks.forEach((t, i) => {
+      // 外側ラッパー（削除背景込み）
+      const wrap = document.createElement('div');
+      wrap.className = 'task-item-wrap';
+
+      // 削除ボタン背景
+      const bg = document.createElement('div');
+      bg.className = 'task-delete-bg';
+      bg.innerHTML = '<span>⊖</span>';
+
+      // タスク本体
       const item = document.createElement('div');
       item.className = 'task-item' + (t.done ? ' done' : '');
+
       const cb = document.createElement('input');
       cb.type = 'checkbox'; cb.checked = t.done; cb.onchange = () => toggleTask(i);
       const label = document.createElement('span');
@@ -160,7 +177,13 @@
       const timeEl = document.createElement('span');
       timeEl.className = 'task-item-time'; timeEl.textContent = t.time ? t.time + '分' : '';
       item.appendChild(cb); item.appendChild(label); item.appendChild(timeEl);
-      list.appendChild(item);
+
+      wrap.appendChild(bg);
+      wrap.appendChild(item);
+      list.appendChild(wrap);
+
+      // スワイプ操作
+      attachSwipe(item, bg, i);
     });
     const totalTime = tasks.reduce((s, t) => s + (t.time || 1), 0);
     const doneTime  = tasks.filter(t => t.done).reduce((s, t) => s + (t.time || 1), 0);
@@ -174,6 +197,81 @@
     const offset = 188.5 - (188.5 * pct / 100);
     document.getElementById('progress-circle').style.strokeDashoffset = offset;
     document.getElementById('progress-pct').textContent = pct + '%';
+  }
+
+  function deleteTask(idx) {
+    tasks.splice(idx, 1);
+    saveTasks();
+    renderTasks();
+  }
+
+  function attachSwipe(item, bg, idx) {
+    let startX = 0, curX = 0, dragging = false, opened = false;
+    const THRESHOLD = 30; // スワイプ判定距離(px)
+    const OPEN_X = 64;    // 開いた時のずれ量(px)
+
+    function onStart(e) {
+      const touch = e.touches ? e.touches[0] : e;
+      startX = touch.clientX;
+      dragging = true;
+      item.style.transition = 'none';
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      const touch = e.touches ? e.touches[0] : e;
+      curX = touch.clientX - startX;
+      // 右方向のみ
+      if (curX < 0) curX = 0;
+      if (curX > OPEN_X + 10) curX = OPEN_X + 10;
+      item.style.transform = 'translateX(' + curX + 'px)';
+    }
+    function onEnd() {
+      if (!dragging) return;
+      dragging = false;
+      item.style.transition = 'transform 0.2s';
+      if (curX > THRESHOLD) {
+        // 開く
+        item.style.transform = 'translateX(' + OPEN_X + 'px)';
+        opened = true;
+      } else {
+        // 戻す
+        item.style.transform = 'translateX(0)';
+        opened = false;
+      }
+      curX = 0;
+    }
+
+    // タッチ
+    item.addEventListener('touchstart', onStart, { passive: true });
+    item.addEventListener('touchmove',  onMove,  { passive: true });
+    item.addEventListener('touchend',   onEnd);
+    // マウス（PC確認用）
+    item.addEventListener('mousedown',  onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup',   onEnd);
+
+    // ⊖ボタン押したら削除アニメーション
+    bg.addEventListener('click', () => {
+      if (!opened) return;
+      const wrap = item.parentElement;
+      wrap.style.transition = 'max-height 0.3s, opacity 0.2s';
+      wrap.style.maxHeight = wrap.offsetHeight + 'px';
+      wrap.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        wrap.style.maxHeight = '0';
+        wrap.style.opacity = '0';
+      });
+      setTimeout(() => deleteTask(idx), 300);
+    });
+
+    // 他のアイテムをスワイプしたら閉じる
+    document.addEventListener('touchstart', (e) => {
+      if (opened && !item.contains(e.target) && !bg.contains(e.target)) {
+        item.style.transition = 'transform 0.2s';
+        item.style.transform = 'translateX(0)';
+        opened = false;
+      }
+    }, { passive: true });
   }
 
   document.getElementById('task-input').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
