@@ -6,85 +6,206 @@
 <title>英作文練習</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: sans-serif; line-height: 2.2; background: #fff; min-height: 100vh; padding: 24px 20px 60px; }
-  .back-btn {
-    display: inline-block; text-decoration: none; background: #FFD700; color: #333;
-    font-size: 0.85em; font-weight: bold; padding: 8px 16px; border-radius: 20px; margin-bottom: 16px;
-  }
-  h2 { font-size: 1.3em; color: #333; margin-bottom: 4px; }
-  .subtitle { font-size: 0.85em; color: #999; margin-bottom: 24px; }
-  .question-block { margin-bottom: 28px; }
-  .q-num { font-size: 0.8em; color: #f48fb1; font-weight: bold; margin-bottom: 2px; }
-  .ja { color: #555; font-size: 0.9em; margin-bottom: 4px; line-height: 1.6; }
-  .en { margin-top: 0; line-height: 2.8; word-break: break-word; }
 
-  /* 入力欄：インラインで文章に馴染む */
+  body {
+    font-family: sans-serif;
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ヘッダー */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 0;
+    position: relative;
+  }
+  .close-btn {
+    font-size: 1.3em; color: #aaa; text-decoration: none; line-height: 1;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .header-title { font-size: 1em; font-weight: bold; color: #333; }
+
+  /* プログレスバー */
+  .progress-bar-wrap {
+    height: 4px; background: #f0f0f0; margin-top: 12px;
+  }
+  .progress-bar-fill {
+    height: 100%; background: #f7a800;
+    transition: width 0.3s ease;
+  }
+
+  /* カウンター */
+  .counter {
+    text-align: center;
+    font-size: 0.88em; color: #888;
+    margin: 14px 0 10px;
+  }
+
+  /* メインカード */
+  .card-area {
+    flex: 1;
+    padding: 10px 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* タグ */
+  .tag {
+    display: inline-block;
+    background: #f5f5f5; color: #888;
+    font-size: 0.78em; padding: 4px 12px;
+    border-radius: 20px; border: 1px solid #e0e0e0;
+  }
+
+  /* 問題番号 */
+  .q-num-label {
+    font-size: 0.75em; color: #f7a800; font-weight: bold; margin-bottom: 2px;
+  }
+
+  /* 日本語 */
+  .ja-text {
+    font-size: 1.22em; color: #222; line-height: 1.65; font-weight: 500;
+  }
+
+  /* 英文エリア */
+  .en-text {
+    font-size: 1.1em; line-height: 2.6;
+    color: #f7a800;
+    word-break: break-word;
+    min-height: 60px;
+  }
+
+  /* 空欄 */
   .blank { display: inline; white-space: nowrap; }
   .blank input {
-    border: none; border-bottom: 2px solid #bbb; outline: none;
-    font-size: 1em; font-family: inherit; width: 100px; background: transparent; padding: 0 4px;
-    vertical-align: baseline;
+    border: none; border-bottom: 2px solid #f7a800; outline: none;
+    font-size: 1em; font-family: inherit; width: 90px;
+    background: transparent; padding: 0 4px;
+    color: #f7a800; vertical-align: baseline;
   }
-  .blank input:focus { border-bottom-color: #FFD700; }
+  .blank input::placeholder { color: #f7c870; }
+  .blank input:focus { border-bottom-color: #e09000; }
 
-  /* 答え合わせ後: 入力欄を非表示 */
-  .blank.correct input,
-  .blank.wrong input { display: none; }
-
-  /* インラインバッジ */
+  /* 答え合わせ後 */
+  .blank.correct input, .blank.wrong input { display: none; }
   .result-wrap { display: inline; }
   .result-badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 0.88em;
-    font-weight: bold;
-    vertical-align: middle;
-    white-space: nowrap;
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 0.88em; font-weight: bold;
+    vertical-align: middle; white-space: nowrap;
   }
   .blank.correct .result-badge {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border: 1.5px solid #a5d6a7;
+    background: #e8f5e9; color: #2e7d32; border: 1.5px solid #a5d6a7;
   }
   .blank.wrong .result-badge {
-    background: #fff3f3;
-    color: #c62828;
-    border: 1.5px solid #ef9a9a;
+    background: #fff3f3; color: #c62828; border: 1.5px solid #ef9a9a;
   }
-
-  /* 正解ヒント（不正解時のみ・バッジの直後に小さく） */
   .answer-hint {
-    display: none;
-    font-size: 0.72em;
-    color: #2e7d32;
-    font-weight: bold;
-    white-space: nowrap;
-    vertical-align: middle;
-    margin-left: 3px;
+    display: none; font-size: 0.72em; color: #2e7d32;
+    font-weight: bold; white-space: nowrap;
+    vertical-align: middle; margin-left: 3px;
   }
   .blank.wrong .answer-hint { display: inline; }
 
-  .btn-wrap { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
-  .check-btn { padding: 10px 28px; background: #FFD700; color: #333; font-size: 1em; font-weight: bold; border: none; border-radius: 20px; cursor: pointer; }
-  .check-btn:hover { background: #ffc200; }
-  .reset-btn { padding: 10px 20px; background: #eee; color: #555; font-size: 0.9em; border: none; border-radius: 20px; cursor: pointer; }
-  .reset-btn:hover { background: #ddd; }
-  .score { font-size: 1.1em; font-weight: bold; color: #333; margin-top: 10px; }
-  .complete-banner { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px; }
+  /* 答え合わせボタン */
+  .check-btn {
+    display: block; width: 100%;
+    padding: 13px; background: #f7a800; color: #fff;
+    font-size: 1em; font-weight: bold; border: none;
+    border-radius: 30px; cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 6px;
+  }
+  .check-btn:hover { background: #e09000; }
+  .check-btn:disabled { background: #ddd; color: #aaa; cursor: default; }
+
+  /* スコア */
+  .score-line {
+    text-align: center; font-size: 0.9em; font-weight: bold; min-height: 22px;
+  }
+
+  /* リセットリンク */
+  .reset-link {
+    text-align: center; font-size: 0.8em; color: #bbb;
+    cursor: pointer; text-decoration: underline;
+  }
+
+  /* 全問正解バナー */
+  .complete-banner {
+    display: none; background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 14px; padding: 18px; text-align: center; margin-top: 8px;
+  }
   .complete-banner.show { display: block; }
-  .complete-banner h3 { color: #15803d; margin-bottom: 8px; }
-  .complete-banner p  { color: #555; font-size: 0.9em; margin-bottom: 14px; }
-  .nav-btn { display: inline-block; padding: 10px 24px; background: #FFD700; color: #333; font-weight: bold; border: none; border-radius: 20px; cursor: pointer; text-decoration: none; margin: 4px; font-size: 0.9em; }
-  .loading-msg { color: #aaa; text-align: center; margin-top: 60px; }
-  .error-msg   { color: #e05555; text-align: center; margin-top: 60px; font-size: 0.9em; }
+  .complete-banner h3 { color: #15803d; margin-bottom: 6px; }
+  .complete-banner p { color: #555; font-size: 0.88em; margin-bottom: 12px; }
+  .nav-btn {
+    display: inline-block; padding: 8px 20px; background: #f7a800;
+    color: #fff; font-weight: bold; border: none; border-radius: 20px;
+    cursor: pointer; text-decoration: none; margin: 4px; font-size: 0.88em;
+  }
+
+  /* 下部ナビ */
+  .bottom-nav {
+    padding: 18px 40px 36px;
+    display: flex; align-items: center; justify-content: center; gap: 40px;
+  }
+  .nav-arrow {
+    background: none; border: none; cursor: pointer;
+    color: #f7a800; font-size: 1.6em; padding: 8px;
+    transition: opacity 0.15s;
+  }
+  .nav-arrow:disabled { opacity: 0.2; cursor: default; }
+  .nav-center-btn {
+    width: 62px; height: 62px; border-radius: 50%;
+    background: #f0f0f0; border: none; cursor: pointer;
+    font-size: 1.4em; color: #888;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .nav-center-btn:hover { background: #e5e5e5; }
+
+  /* 例文一覧ボタン */
+  .list-btn-wrap { text-align: center; padding-bottom: 12px; }
+  .list-btn {
+    display: inline-block; padding: 9px 28px;
+    border: 2px solid #f7a800; border-radius: 30px;
+    color: #f7a800; font-size: 0.88em; font-weight: bold;
+    text-decoration: none; background: none; cursor: pointer;
+  }
+
+  .loading-msg { color: #aaa; text-align: center; margin-top: 80px; padding: 20px; }
+  .error-msg { color: #e05555; text-align: center; margin-top: 80px; font-size: 0.9em; padding: 20px; }
 </style>
 </head>
 <body>
 
-<a class="back-btn" id="backBtn" href="eisakubun_play.html">← 単元一覧へ戻る</a>
+<!-- ヘッダー -->
+<div class="header">
+  <a class="close-btn" id="backBtn" href="eisakubun_play.html">✕</a>
+  <span class="header-title" id="headerTitle"></span>
+  <div style="width:32px;"></div>
+</div>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+</div>
 
+<div class="counter" id="counter"></div>
+
+<!-- メインコンテンツ -->
 <div id="mainContent"><p class="loading-msg">読み込み中...</p></div>
+
+<!-- 下部ナビ -->
+<div class="bottom-nav" id="bottomNav" style="display:none;">
+  <button class="nav-arrow" id="btnPrev" onclick="navigate(-1)">⏮</button>
+  <button class="nav-center-btn" id="btnPause" onclick="togglePause()">⏸</button>
+  <button class="nav-arrow" id="btnNext" onclick="navigate(1)">⏭</button>
+</div>
+<div class="list-btn-wrap" id="listBtnWrap" style="display:none;">
+  <a class="list-btn" id="listBtn" href="#">例文一覧</a>
+</div>
 
 <script>
 const SCORE_PREFIX = 'eisakubun_score_';
@@ -93,8 +214,14 @@ const unitFile = params.get('file') || '';
 const unitName = params.get('name') || '';
 const unitTag  = params.get('tag')  || '';
 
-// 戻るボタン
+let cards = [];
+let currentIdx = 0;
+let paused = false;
+let checked = []; // 各カードの答え合わせ済みフラグ
+
 document.getElementById('backBtn').href =
+  'eisakubun_play.html?tag=' + encodeURIComponent(unitTag);
+document.getElementById('listBtn').href =
   'eisakubun_play.html?tag=' + encodeURIComponent(unitTag);
 
 async function load() {
@@ -106,8 +233,7 @@ async function load() {
     const res  = await fetch(unitFile + '?v=' + Date.now());
     const text = await res.text();
     const lines = text.trim().split('\n').slice(1).filter(l => l.trim());
-
-    const cards = lines.map((line, i) => {
+    cards = lines.map((line, i) => {
       const cols = parseCSV(line);
       return { id: i, title: cols[0]?.trim(), ja: cols[1]?.trim(), en: cols[2]?.trim() };
     }).filter(c => c.ja && c.en);
@@ -117,10 +243,14 @@ async function load() {
       return;
     }
 
-    renderPage(cards);
+    checked = new Array(cards.length).fill(false);
+    document.getElementById('headerTitle').textContent = unitName;
+    document.getElementById('bottomNav').style.display = '';
+    document.getElementById('listBtnWrap').style.display = '';
+    renderCard(0);
   } catch(e) {
     document.getElementById('mainContent').innerHTML =
-      '<p class="error-msg">「' + unitFile + '」の読み込みに失敗しました。<br>GitHubにアップロードされているか確認してください。</p>';
+      '<p class="error-msg">「' + unitFile + '」の読み込みに失敗しました。</p>';
   }
 }
 
@@ -148,64 +278,70 @@ function buildEnHtml(enStr) {
   });
 }
 
-function renderPage(cards) {
-  let html = '<h2>' + unitName + '</h2>' +
-    '<p class="subtitle">「' + unitTag + '」 ／ ' + cards.length + '文 ／ 空欄を埋めて答え合わせ</p>';
+function renderCard(idx) {
+  currentIdx = idx;
+  const card = cards[idx];
+  const total = cards.length;
 
-  cards.forEach((card, idx) => {
-    html += '<div class="question-block">' +
-      '<div class="q-num">Q' + (idx + 1) + '　' + card.title + '</div>' +
-      '<p class="ja">📌 ' + card.ja + '</p>' +
-      '<p class="en">' + buildEnHtml(card.en) + '</p>' +
-      '</div>';
-  });
+  // プログレス・カウンター
+  document.getElementById('progressBar').style.width = ((idx + 1) / total * 100) + '%';
+  document.getElementById('counter').textContent = (idx + 1) + ' / ' + total;
 
-  html += '<div class="btn-wrap">' +
-    '<button class="check-btn" onclick="checkAll()">✔ 答え合わせ</button>' +
-    '<button class="reset-btn" onclick="resetAll()">↺ リセット</button>' +
-    '</div>' +
-    '<div class="score" id="score"></div>' +
-    '<div class="complete-banner" id="completeBanner">' +
-    '<h3>🎉 全問正解！</h3>' +
-    '<p id="completeMsg"></p>' +
-    '<a class="nav-btn" href="eisakubun_play.html?tag=' + encodeURIComponent(unitTag) + '">← 一覧へ戻る</a>' +
-    '<button class="nav-btn" onclick="resetAll()">↺ もう一度</button>' +
+  // ナビゲーションボタン
+  document.getElementById('btnPrev').disabled = idx === 0;
+  document.getElementById('btnNext').disabled = idx === total - 1;
+
+  const html =
+    '<div class="card-area">' +
+      '<div><span class="tag">' + (unitTag || '') + '</span></div>' +
+      '<div>' +
+        '<div class="q-num-label">Q' + (idx + 1) + '　' + (card.title || '') + '</div>' +
+        '<div class="ja-text">' + card.ja + '</div>' +
+      '</div>' +
+      '<div class="en-text">' + buildEnHtml(card.en) + '</div>' +
+      '<button class="check-btn" id="checkBtn" onclick="checkCard()">✔ 答え合わせ</button>' +
+      '<div class="score-line" id="scoreLine"></div>' +
+      '<div class="reset-link" id="resetLink" style="display:none;" onclick="resetCard()">↺ リセット</div>' +
+      '<div class="complete-banner" id="completeBanner">' +
+        '<h3>🎉 全問正解！</h3>' +
+        '<p id="completeMsg"></p>' +
+        '<button class="nav-btn" onclick="resetCard()">↺ もう一度</button>' +
+        (idx < total - 1 ? '<button class="nav-btn" onclick="navigate(1)">次の問題 →</button>' : '') +
+      '</div>' +
     '</div>';
 
   document.getElementById('mainContent').innerHTML = html;
+
+  // 答え合わせ済みなら復元
+  if (checked[idx]) restoreChecked();
 }
 
-function normalize(s) { return s.toLowerCase().replace(/\s+/g, ''); }
-
-function checkAll() {
+function checkCard() {
   const inputs = document.querySelectorAll('.blank input');
   let correct = 0;
   inputs.forEach(input => {
     const span = input.parentElement;
     const badge = span.querySelector('.result-badge');
     const hint  = span.querySelector('.answer-hint');
-
     if (normalize(input.value) === normalize(input.dataset.answer)) {
-      span.classList.remove('wrong');
-      span.classList.add('correct');
+      span.classList.remove('wrong'); span.classList.add('correct');
       badge.textContent = '○ ' + input.dataset.answer;
-      hint.textContent  = '';
+      hint.textContent = '';
       correct++;
     } else {
-      span.classList.remove('correct');
-      span.classList.add('wrong');
-      const userVal = input.value.trim() || '（空白）';
-      badge.textContent = '× ' + userVal;
+      span.classList.remove('correct'); span.classList.add('wrong');
+      badge.textContent = '× ' + (input.value.trim() || '（空白）');
       hint.textContent  = '→ ' + input.dataset.answer;
     }
   });
-
   const total = inputs.length;
-  const scoreEl = document.getElementById('score');
+  const scoreEl = document.getElementById('scoreLine');
   scoreEl.textContent = '結果：' + correct + ' / ' + total + ' 正解';
   scoreEl.style.color = correct === total ? '#4caf50' : '#f44336';
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('resetLink').style.display = '';
+  checked[currentIdx] = true;
 
-  // スコア保存（単元CSVファイル名をキーに）
   const key  = SCORE_PREFIX + unitFile;
   const prev = JSON.parse(localStorage.getItem(key) || '{"best":0,"count":0}');
   const pct  = Math.round((correct / total) * 100);
@@ -213,11 +349,18 @@ function checkAll() {
 
   if (correct === total) {
     document.getElementById('completeBanner').classList.add('show');
-    document.getElementById('completeMsg').textContent = total + '問すべて正解しました！';
+    document.getElementById('completeMsg').textContent = total + '問すべて正解！';
   }
 }
 
-function resetAll() {
+function restoreChecked() {
+  // すでにHTML生成済みなので、チェックボタンをdisabledにするだけ
+  const btn = document.getElementById('checkBtn');
+  if (btn) btn.disabled = false; // 再チャレンジ可能
+}
+
+function resetCard() {
+  checked[currentIdx] = false;
   document.querySelectorAll('.blank').forEach(span => {
     span.classList.remove('correct', 'wrong');
     const input = span.querySelector('input');
@@ -227,9 +370,23 @@ function resetAll() {
     const hint = span.querySelector('.answer-hint');
     if (hint) hint.textContent = '';
   });
-  document.getElementById('score').textContent = '';
+  document.getElementById('scoreLine').textContent = '';
   document.getElementById('completeBanner')?.classList.remove('show');
+  document.getElementById('checkBtn').disabled = false;
+  document.getElementById('resetLink').style.display = 'none';
 }
+
+function navigate(dir) {
+  const next = currentIdx + dir;
+  if (next >= 0 && next < cards.length) renderCard(next);
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btnPause').textContent = paused ? '▶' : '⏸';
+}
+
+function normalize(s) { return s.toLowerCase().replace(/\s+/g, ''); }
 
 load();
 </script>
