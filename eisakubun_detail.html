@@ -343,9 +343,14 @@ function checkCard() {
   checked[currentIdx] = true;
 
   const key  = SCORE_PREFIX + unitFile;
-  const prev = JSON.parse(localStorage.getItem(key) || '{"best":0,"count":0}');
+  const prev = JSON.parse(localStorage.getItem(key) || '{"best":0,"count":0,"correct":0,"total":0}');
   const pct  = Math.round((correct / total) * 100);
-  localStorage.setItem(key, JSON.stringify({ best: Math.max(prev.best, pct), count: prev.count + 1 }));
+  localStorage.setItem(key, JSON.stringify({
+    best: Math.max(prev.best, pct),
+    count: prev.count + 1,
+    correct: correct,
+    total: total
+  }));
 
   if (correct === total) {
     document.getElementById('completeBanner').classList.add('show');

@@ -40,6 +40,7 @@
   <div><a class="back-btn" href="eisakubun.html">← テーマ一覧へ</a></div>
   <h1 id="pageTitle">🌸 英作文復習</h1>
   <p id="pageSubtitle">単元を選んでください</p>
+  <div id="totalScore" style="margin-top:10px;font-size:0.88em;color:#c2185b;font-weight:bold;min-height:20px;"></div>
 </header>
 <main id="mainContent"><p class="loading-msg">読み込み中...</p></main>
 
@@ -86,6 +87,21 @@ async function load() {
 
     main.innerHTML = '';
     main.appendChild(grid);
+
+    // 全体正解率を集計
+    let totalCorrect = 0, totalQuestions = 0;
+    units.forEach(unit => {
+      const sd = JSON.parse(localStorage.getItem(SCORE_PREFIX + unit.file) || 'null');
+      if (sd && sd.total > 0) {
+        totalCorrect   += sd.correct || 0;
+        totalQuestions += sd.total   || 0;
+      }
+    });
+    const scoreEl = document.getElementById('totalScore');
+    if (totalQuestions > 0) {
+      const overallPct = Math.round((totalCorrect / totalQuestions) * 100);
+      scoreEl.textContent = '直近の全体正解率：' + totalCorrect + ' / ' + totalQuestions + ' 正解（' + overallPct + '%）';
+    }
 
     setTimeout(() => {
       document.querySelectorAll('.progress-bar[data-pct]').forEach(b => { b.style.width = b.dataset.pct + '%'; });
