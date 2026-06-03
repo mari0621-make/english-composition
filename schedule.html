@@ -371,8 +371,8 @@
   <!-- 6/22 -->
   <div class="section">
     <div class="section-header">
-      <span class="section-tag"></span>
-      <span class="section-title">6/22までのスケジュールspan>
+      <span class="section-tag">6/22まで</span>
+      <span class="section-title">スケジュール<span>
     </div>
     <div class="check-list" id="list-531">
       <div class="check-row" onclick="toggle(this)">
@@ -384,55 +384,57 @@
       <div class="check-row" onclick="toggle(this)">
         <div class="check-box"><svg viewBox="0 0 13 13" fill="none"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="check-content">
-          <div class="check-label">英検スピーキング対策<span class="chip">21:00 – 22:00</span></div>
-          <div class="check-detail">①最初に問題解く②googleAIstudioで添削③ノートに書いて暗記</div>
-          <div class="check-detail">翌日完全に口からすらすらでるようにする</div>
+          <div class="check-label">英検スピーキング対策<span class="chip">20:30 – 22:30</span></div>
+          <div class="check-detail">①最初に問題解く②googleAIstudioで添削③ノートに書いて理解</div>
+          <div class="check-detail">④暗記：翌日完全に口からすらすらでるようにする</div>
+          <div class="check-detail">6/7までTask 1–2：動画視聴＋EVIN文法（説明できるようになる）<br>Task3-9：例文暗唱 60分 ＋ オンライン英会話30分</div>
         </div>
       </div>
   </div>
 
-  <!-- 6/1〜6/22 -->
+  <!-- 6/22 分岐 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">6 / 22</span>
+    <span class="section-title">結果による分岐</span>
+  </div>
+  <div class="branch-grid">
+    <div class="branch-card pass">
+      <div class="branch-verdict">✓ 合格</div>
+      <div class="branch-body">英検スピーキング対策 2時間 ＋ Circle 例文暗唱をそのまま継続</div>
+    </div>
+    <div class="branch-card fail">
+      <div class="branch-verdict">✗ 不合格</div>
+      <div class="branch-body">Circle ＋ 英検1次対策に戻る</div>
+    </div>
+  </div>
+</div>
+
+  <!-- 6/22〜7/30 -->
   <div class="section">
     <div class="section-header">
-      <span class="section-tag">6/1 – 6/22</span>
+      <span class="section-tag">6/22– 7/30</span>
       <span class="section-title">毎日のタスク</span>
     </div>
     <div class="check-list" id="list-daily">
       <div class="check-row" onclick="toggle(this)">
         <div class="check-box"><svg viewBox="0 0 13 13" fill="none"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="check-content">
-          <div class="check-label">英検2次対策 <span class="chip chip-gold">1.5 ～ 2時間</span></div>
-          <div class="check-detail">スピーキング対策 15分<br>→ 復習 30分、暗記 30分</div>
+          <div class="check-label">Circleタスク　トピックストーク<span class="chip chip-gold">1.5 ～ 2時間</span></div>
+          <div class="check-detail">シャドーイング15分＋トピックストーク暗記30分<br>オンライン英会話45分</div>
         </div>
       </div>
       <div class="check-row" onclick="toggle(this)">
         <div class="check-box"><svg viewBox="0 0 13 13" fill="none"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="check-content">
-          <div class="check-label">Circle タスク <span class="chip chip-green">1時間</span></div>
-          <div class="check-detail">Task 1–2：動画視聴＋EVIN文法（説明できるようになる）<br>Task 3 以降：例文暗唱 60分 ＋ オンライン英会話30分</div>
+          <div class="check-label">英検対策 <span class="chip chip-green">90分</span></div>
+          <div class="check-detail">単語EX2400 30分<br>英作文6</div>
         </div>
       </div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="prog-daily"></div></div>
-    <div class="progress-label" id="prog-daily-label">0 / 2</div>
-  </div>
 
-  <!-- 6/22 分岐 -->
-  <div class="section">
-    <div class="section-header">
-      <span class="section-tag">6 / 22</span>
-      <span class="section-title">結果による分岐</span>
-    </div>
-    <div class="branch-grid">
-      <div class="branch-card pass">
-        <div class="branch-verdict">✓ 合格</div>
-        <div class="branch-body">英検スピーキング対策 2時間 ＋ Circle 例文暗唱をそのまま継続</div>
-      </div>
-      <div class="branch-card fail">
-        <div class="branch-verdict">✗ 不合格</div>
-        <div class="branch-body">Circle ＋ 英検1次対策に戻る</div>
-      </div>
-    </div>
+     <div class="progress-bar"><div class="progress-fill" id="prog-daily"></div></div>
+    <div class="progress-label" id="prog-daily-label">0 / 2</div>
   </div>
 
   <footer>Study Plan · 2025</footer>
